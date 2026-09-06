@@ -1,59 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My First Deploy</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      font-family: Arial, sans-serif;
-      color: white;
-      text-align: center;
-    }
-    .box {
-      padding: 40px;
-    }
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-    }
-    p {
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
-    button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background: white;
-      color: #764ba2;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      opacity: 0.85;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loco — Local Stores. Real Convenience.</title>
+  <meta name="description" content="Loco local shopping prototype." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="box">
-    <h1>🎉 It's Live!</h1>
-    <p>If you're seeing this, GitHub → Vercel is working.</p>
-    <button onclick="sayHi()">Click me</button>
+  <div class="app-shell">
+    <div class="statusbar"><span>9:41</span><span>● ● ▰</span></div>
+
+    <header class="topbar">
+      <button class="icon-btn ghost" id="backBtn" aria-label="Back">‹</button>
+      <div class="brand-mini"><span class="pin-logo">●</span><strong>Loco</strong></div>
+      <button class="icon-btn" id="profileQuick" aria-label="Profile">☺</button>
+    </header>
+
+    <main id="app"></main>
+
+    <nav class="bottom-nav">
+      <button data-route="home" class="nav-item active"><span>⌂</span><small>Home</small></button>
+      <button data-route="orders" class="nav-item"><span>▤</span><small>Orders</small></button>
+      <button data-route="cart" class="nav-item cart-nav"><span>🛒<b id="cartBadge">0</b></span><small>Cart</small></button>
+      <button data-route="loyalty" class="nav-item"><span>☆</span><small>Loyalty</small></button>
+      <button data-route="profile" class="nav-item"><span>☰</span><small>More</small></button>
+    </nav>
   </div>
 
-  <script>
-    function sayHi() {
-      alert("JavaScript is working too!");
-    }
-  </script>
+  <div id="toast"></div>
+  <div id="modalRoot"></div>
+  <script src="script.js"></script>
 </body>
 </html>
