@@ -1,298 +1,727 @@
-*{box-sizing:border-box}
-:root{
- --cream:#f7f7df;--cream2:#eff1d4;--green:#355b2d;--green2:#648f46;--sage:#dfe9bd;
- --plum:#55133d;--plum2:#70204e;--ink:#283226;--muted:#6c7661;--white:#fffef5;
- --shadow:0 12px 28px rgba(44,63,35,.10);--radius:22px
-}
-html,body{margin:0;background:#dfe7ce;color:var(--ink);font-family:"DM Sans",sans-serif}
-body{min-height:100vh}
-button,input{font:inherit}
-button{cursor:pointer}
-.app-shell{width:min(100%,520px);min-height:100vh;margin:auto;background:var(--cream);position:relative;box-shadow:0 0 50px rgba(0,0,0,.12);overflow:hidden}
-.statusbar{height:30px;padding:9px 22px 0;display:flex;justify-content:space-between;font-size:12px;font-weight:700}
-.topbar{height:62px;padding:8px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;background:rgba(247,247,223,.93);backdrop-filter:blur(10px)}
-.brand-mini{font-size:22px;display:flex;align-items:center;gap:7px}.brand-mini strong{letter-spacing:-1px}.pin-logo{width:23px;height:27px;border:4px solid var(--green);border-radius:50% 50% 50% 0;transform:rotate(-45deg);font-size:0;position:relative}.pin-logo:after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:var(--plum);left:5px;top:5px}
-.icon-btn{border:0;background:var(--sage);color:var(--green);width:40px;height:40px;border-radius:50%;font-size:22px}.icon-btn.ghost{background:transparent;font-size:30px;visibility:hidden}
-#app{padding:0 18px 104px;min-height:calc(100vh - 92px)}
-.hero{margin-top:4px;border-radius:26px;min-height:215px;padding:24px;position:relative;overflow:hidden;background:linear-gradient(135deg,#e9efc9 0%,#c9dfa9 100%);box-shadow:var(--shadow)}
-.hero:after{content:"🥬 🍅";position:absolute;right:-2px;bottom:2px;font-size:68px;transform:rotate(-7deg);filter:drop-shadow(0 10px 8px rgba(30,50,20,.12))}
-.hero h1{font-family:"Playfair Display",serif;font-size:32px;line-height:1.02;margin:8px 0 10px;max-width:245px;color:var(--plum)}
-.hero p{max-width:240px;margin:0 0 18px;color:#52604a;font-size:13px}
-.pill-btn,.primary-btn{border:0;background:var(--plum);color:white;border-radius:999px;padding:12px 18px;font-weight:700;box-shadow:0 8px 18px rgba(85,19,61,.18);transition:.2s transform,.2s opacity}.pill-btn:active,.primary-btn:active{transform:scale(.97)}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin:24px 2px 12px}.section-head h2{font-size:20px;margin:0}.link{color:var(--green);font-weight:700;border:0;background:transparent}
-.search{display:flex;gap:10px;align-items:center;background:var(--white);border:1px solid #d9dfbe;border-radius:999px;padding:11px 15px;margin:8px 0 18px}.search input{border:0;outline:0;background:transparent;flex:1;color:var(--ink)}.search span{font-size:18px}
-.categories{display:flex;gap:12px;overflow:auto;padding:2px 2px 6px;scrollbar-width:none}.categories::-webkit-scrollbar{display:none}.cat{min-width:74px;text-align:center;border:0;background:transparent;color:var(--ink);font-size:11px}.cat .circle{width:54px;height:54px;margin:auto auto 7px;border-radius:50%;display:grid;place-items:center;background:var(--sage);font-size:25px;box-shadow:inset 0 0 0 1px #d3dfb0}.cat.active .circle{background:var(--green);color:white}
-.store-row{display:flex;gap:12px;overflow:auto;padding:2px 1px 8px;scrollbar-width:none}.store-row::-webkit-scrollbar{display:none}
-.store-card{min-width:180px;background:var(--white);border:1px solid #e0e5c9;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px rgba(50,65,40,.06);transition:.2s transform}.store-card:active{transform:scale(.98)}
-.store-img{height:112px;background-size:cover;background-position:center;position:relative}.fav{position:absolute;right:9px;top:9px;border:0;width:31px;height:31px;border-radius:50%;background:rgba(255,255,245,.9);color:var(--plum);font-size:16px}.store-info{padding:10px}.store-info h3{font-size:14px;margin:0 0 4px}.meta{font-size:11px;color:var(--muted);margin:3px 0}.offer{display:inline-block;background:#e8efc8;color:#42602f;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:700;margin-top:5px}
-.banner{margin-top:20px;background:var(--plum);color:white;border-radius:22px;padding:18px;position:relative;overflow:hidden}.banner h3{font-size:20px;margin:0 0 4px}.banner p{font-size:12px;margin:0 0 12px;color:#f4dfeb}.banner .pill-btn{background:#dcecb0;color:var(--green)}
-.page-title{padding:12px 0 4px}.page-title h1{font-family:"Playfair Display",serif;font-size:31px;margin:0;color:var(--plum)}.page-title p{color:var(--muted);font-size:13px}
-.filter-row{display:flex;gap:8px;overflow:auto;margin:12px 0 16px}.filter{border:1px solid #d6ddbb;background:var(--white);color:var(--green);padding:8px 13px;border-radius:999px;white-space:nowrap;font-size:12px}.filter.active{background:var(--green);color:white}
-.list{display:grid;gap:12px}.store-list-card{display:flex;background:var(--white);border:1px solid #dfe5c9;border-radius:19px;padding:9px;gap:11px;box-shadow:0 7px 18px rgba(50,65,40,.06)}.store-list-card .store-img{width:112px;height:112px;border-radius:14px;flex:none}.store-list-card .store-info{padding:4px 2px}
-.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.product-card{background:var(--white);border:1px solid #dfe5c9;border-radius:20px;overflow:hidden;box-shadow:0 8px 18px rgba(50,65,40,.06)}.product-img{height:145px;background-size:cover;background-position:center}.product-body{padding:12px}.product-body h3{font-size:14px;margin:0 0 5px}.price{font-size:16px;font-weight:800;color:var(--plum)}.small-btn{border:0;border-radius:999px;background:var(--green);color:white;padding:8px 12px;font-size:11px;font-weight:700}.product-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
-.detail-img{height:260px;border-radius:25px;background-size:cover;background-position:center;margin-top:8px}.detail-card{background:var(--white);border-radius:25px;padding:20px;margin-top:-22px;position:relative;box-shadow:var(--shadow)}.detail-card h1{font-family:"Playfair Display",serif;color:var(--plum);margin:0 0 6px;font-size:30px}.rating{color:#a27815;font-weight:700;font-size:12px}.qty{display:flex;align-items:center;gap:13px}.qty button{width:34px;height:34px;border-radius:50%;border:1px solid #ccd6ad;background:var(--cream);color:var(--green);font-weight:800}
-.action-row{display:flex;gap:10px;margin-top:18px}.action-row>*{flex:1}
-.cart-item{display:flex;gap:12px;background:var(--white);border:1px solid #dfe5c9;border-radius:18px;padding:10px;margin-bottom:10px;align-items:center}.thumb{width:68px;height:68px;border-radius:13px;background-size:cover;background-position:center;flex:none}.cart-item h3{font-size:13px;margin:0 0 4px}.cart-controls{display:flex;align-items:center;gap:8px;margin-top:7px}.cart-controls button{border:0;background:var(--sage);border-radius:50%;width:27px;height:27px}.summary{background:var(--white);border-radius:22px;padding:17px;margin-top:18px}.sumline{display:flex;justify-content:space-between;margin:8px 0;font-size:13px}.sumline.total{font-weight:800;font-size:18px;color:var(--plum);border-top:1px solid #e0e4ce;padding-top:12px}
-.slot-grid{display:grid;gap:9px;margin:12px 0}.slot{border:1px solid #d4ddb8;background:var(--white);border-radius:15px;padding:13px;text-align:left;color:var(--ink)}.slot.selected{background:var(--green);color:white;border-color:var(--green)}
-.success{text-align:center;padding-top:40px}.check{width:90px;height:90px;margin:auto;border-radius:50%;background:#dbeab8;color:var(--green);display:grid;place-items:center;font-size:50px;animation:pop .55s ease}.success h1{font-family:"Playfair Display",serif;color:var(--plum);font-size:31px}.success .summary{text-align:left;margin-top:25px}
-.profile-card{background:linear-gradient(135deg,#dce9bc,#f8f7df);padding:22px;border-radius:24px;display:flex;align-items:center;gap:15px}.avatar{width:62px;height:62px;border-radius:50%;background:var(--green);color:white;display:grid;place-items:center;font-size:25px}.menu-card{background:var(--white);border-radius:22px;margin-top:15px;overflow:hidden}.menu-row{width:100%;border:0;border-bottom:1px solid #e4e8d4;background:transparent;padding:16px;display:flex;justify-content:space-between;color:var(--ink)}.menu-row:last-child{border-bottom:0}
-.points{background:var(--green);color:white;border-radius:25px;padding:24px;position:relative;overflow:hidden}.points strong{font-size:40px;display:block}.progress{height:8px;background:rgba(255,255,255,.25);border-radius:99px;margin-top:18px;overflow:hidden}.progress i{display:block;height:100%;width:50%;background:#e1efb7;border-radius:99px}
-.order-card{background:var(--white);border-radius:20px;border:1px solid #dfe5c9;padding:16px;margin-bottom:12px}.status{display:inline-block;background:#e6efc7;color:var(--green);padding:6px 9px;border-radius:999px;font-size:10px;font-weight:800}
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,520px);height:78px;background:rgba(255,255,245,.96);backdrop-filter:blur(15px);border-top:1px solid #dfe4ca;display:flex;justify-content:space-around;z-index:50;padding-top:8px}.nav-item{position:relative;border:0;background:transparent;color:#707967;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:21px;min-width:58px}.nav-item small{font-size:10px;font-weight:600}.nav-item.active{color:var(--plum)}.cart-nav b{position:absolute;top:-2px;right:9px;background:var(--plum);color:white;font-size:9px;min-width:16px;height:16px;border-radius:50%;display:grid;place-items:center}
-#toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);background:#263526;color:white;padding:11px 16px;border-radius:999px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;z-index:100;white-space:nowrap}#toast.show{opacity:1;transform:translate(-50%,0)}
-.modal-back{position:fixed;inset:0;background:rgba(25,32,22,.45);z-index:90;display:grid;place-items:end center}.modal{width:min(100%,520px);background:var(--cream);border-radius:28px 28px 0 0;padding:20px;animation:slideup .25s ease}.modal h2{margin-top:0;color:var(--plum)}
-@keyframes pop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}@keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.fade{animation:fade .3s ease}
-@media(min-width:700px){.app-shell{margin:20px auto;min-height:calc(100vh - 40px);border-radius:34px}.bottom-nav{bottom:20px;border-radius:0 0 30px 30px}}
-
-# Loco — Interactive Prototype
-
-A mobile-first front-end product prototype built with:
-- HTML5
-- CSS3
-- Vanilla JavaScript
-
-No backend, database, real authentication, payment gateway, GPS, or real reservation system is required.
-
-## Main demo flow
-Home → Nearby Stores → Fresh Mart → Product → Add to Cart → Cart → Reservation → Confirmation
-
-## Run locally
-Open `index.html` in a browser.
-
-## Deploy
-This folder can be uploaded to Netlify or connected to a GitHub repository and deployed through Vercel.
-
-## Notes
-Product/store photos use remote Unsplash image URLs. Replace them with local images in `images/` later if preferred.
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loco — Local Stores. Real Convenience.</title>
-  <meta name="description" content="Loco local shopping prototype." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grabbit App UI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f0f4ec;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Mobile Container Frame */
+    .app-container {
+      width: 100%;
+      max-width: 412px;
+      height: 870px;
+      background-color: #f7faef;
+      border-radius: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border: 10px solid #1c1c1c;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Top Header */
+    .header {
+      padding: 16px 20px 8px 20px;
+      background-color: #f7faef;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2b1d1d;
+      margin-bottom: 12px;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-container i {
+      font-size: 28px;
+      color: #431c28;
+    }
+
+    .brand-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #431c28;
+      line-height: 1;
+    }
+
+    .tagline {
+      font-size: 10px;
+      color: #431c28;
+      font-style: italic;
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .location-selector {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #431c28;
+      cursor: pointer;
+    }
+
+    .profile-icon {
+      width: 32px;
+      height: 32px;
+      background-color: #431c28;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      background-color: #edf2e1;
+      border: 1px solid #d8e2c8;
+      border-radius: 24px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-bar i {
+      color: #657551;
+    }
+
+    .search-bar input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 13px;
+      color: #333;
+    }
+
+    /* Scrollable Main Content */
+    .content-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 16px 80px 16px;
+      scrollbar-width: none;
+    }
+    .content-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Map Widget Section */
+    .map-card {
+      background-color: #e5edd7;
+      border-radius: 16px;
+      margin-top: 12px;
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .map-preview {
+      flex: 1.2;
+      height: 150px;
+      background-color: #dbe6cb;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ccd8ba;
+    }
+
+    .map-pin {
+      position: absolute;
+      background-color: #431c28;
+      color: white;
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .pin-1 { top: 20px; left: 15px; }
+    .pin-2 { top: 35px; right: 10px; }
+    .pin-3 { bottom: 20px; left: 15px; }
+    .pin-4 { bottom: 35px; right: 30px; }
+
+    .user-location-pin {
+      position: absolute;
+      top: 45%;
+      left: 45%;
+      width: 14px;
+      height: 14px;
+      background-color: #2a75d3;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 0 6px rgba(42, 117, 211, 0.2);
+    }
+
+    .store-list-mini {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mini-list-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #431c28;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mini-store-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #f7faef;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 10px;
+    }
+
+    .mini-store-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mini-store-name {
+      font-weight: 700;
+      color: #333;
+    }
+
+    .mini-store-dist {
+      color: #666;
+      font-size: 9px;
+    }
+
+    /* Categories Grid */
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .category-icon {
+      width: 44px;
+      height: 44px;
+      background-color: #e5edd7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #431c28;
+      font-size: 18px;
+    }
+
+    .category-label {
+      font-size: 9px;
+      font-weight: 600;
+      color: #333;
+      line-height: 1.1;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #431c28;
+    }
+
+    .view-all {
+      font-size: 11px;
+      font-weight: 700;
+      color: #5d7a3d;
+      text-decoration: none;
+    }
+
+    /* Horizontal Stores Cards */
+    .horizontal-cards {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+
+    .store-card {
+      min-width: 140px;
+      width: 140px;
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      border: 1px solid #eef2e6;
+    }
+
+    .card-image {
+      height: 80px;
+      background-color: #ddd;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .store-1-img { background-image: url('https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=300&q=80'); }
+    .store-2-img { background-image: url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=300&q=80'); }
+    .store-3-img { background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=300&q=80'); }
+
+    .fav-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      color: white;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background-color: #c83b3b;
+      color: white;
+      font-size: 8px;
+      font-weight: 700;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    .card-body {
+      padding: 8px;
+    }
+
+    .card-distance {
+      font-size: 9px;
+      color: #666;
+      margin-bottom: 2px;
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-tags {
+      font-size: 8px;
+      color: #777;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-rating {
+      font-size: 9px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .offer-pill {
+      display: inline-block;
+      background-color: #e2f0d3;
+      color: #3c6522;
+      font-size: 8px;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 10px;
+    }
+
+    /* Banner Promo */
+    .promo-banner {
+      background: linear-gradient(135deg, #431c28 0%, #2b111a 100%);
+      border-radius: 16px;
+      padding: 14px 16px;
+      color: white;
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .promo-content h3 {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .promo-content p {
+      font-size: 11px;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .promo-btn {
+      background-color: #f7faef;
+      color: #431c28;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .promo-image {
+      font-size: 36px;
+      color: #a8d580;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e8d5;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: #7a8a68;
+      text-decoration: none;
+      font-size: 9px;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .nav-item.active {
+      color: #431c28;
+    }
+
+    .nav-item i {
+      font-size: 18px;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: 4px;
+      background-color: #431c28;
+      color: white;
+      font-size: 8px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
-  <div class="app-shell">
-    <div class="statusbar"><span>9:41</span><span>● ● ▰</span></div>
 
-    <header class="topbar">
-      <button class="icon-btn ghost" id="backBtn" aria-label="Back">‹</button>
-      <div class="brand-mini"><span class="pin-logo">●</span><strong>Loco</strong></div>
-      <button class="icon-btn" id="profileQuick" aria-label="Profile">☺</button>
-    </header>
+  <div class="app-container">
+    <div class="header">
+      <div class="status-bar">
+        <span>9:41</span>
+        <div>
+          <i class="fa-solid fa-signal"></i>
+          <i class="fa-solid fa-wifi" style="margin: 0 4px;"></i>
+          <i class="fa-solid fa-battery-full"></i>
+        </div>
+      </div>
 
-    <main id="app"></main>
+      <div class="top-nav">
+        <div class="logo-container">
+          <i class="fa-solid fa-carrot"></i>
+          <div>
+            <div class="brand-title">Grabbit</div>
+            <div class="tagline">Bringing Freshness Closer to You</div>
+          </div>
+        </div>
+        <div class="user-actions">
+          <div class="location-selector" id="locationBtn">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Irinjalakuda</span>
+            <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+          </div>
+          <div class="profile-icon">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        </div>
+      </div>
 
-    <nav class="bottom-nav">
-      <button data-route="home" class="nav-item active"><span>⌂</span><small>Home</small></button>
-      <button data-route="orders" class="nav-item"><span>▤</span><small>Orders</small></button>
-      <button data-route="cart" class="nav-item cart-nav"><span>🛒<b id="cartBadge">0</b></span><small>Cart</small></button>
-      <button data-route="loyalty" class="nav-item"><span>☆</span><small>Loyalty</small></button>
-      <button data-route="profile" class="nav-item"><span>☰</span><small>More</small></button>
-    </nav>
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search for products or nearby stores...">
+        <i class="fa-solid fa-microphone"></i>
+      </div>
+    </div>
+
+    <div class="content-scroll">
+      <div class="map-card">
+        <div class="map-preview">
+          <div class="user-location-pin"></div>
+          <div class="map-pin pin-1"><i class="fa-solid fa-store"></i> 320 m</div>
+          <div class="map-pin pin-2"><i class="fa-solid fa-store"></i> 450 m</div>
+          <div class="map-pin pin-3"><i class="fa-solid fa-store"></i> 680 m</div>
+          <div class="map-pin pin-4"><i class="fa-solid fa-store"></i> 720 m</div>
+        </div>
+        <div class="store-list-mini">
+          <div class="mini-list-title">
+            <i class="fa-solid fa-location-dot"></i> Nearby Stores
+          </div>
+          <div class="mini-store-item">
+            <div class="mini-store-info">
+              <span class="mini-store-name">Fresh Mart</span>
+              <span class="mini-store-dist">320 m</span>
+            </div>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+          <div class="mini-store-item">
+            <div class="mini-store-info">
+              <span class="mini-store-name">Sri Krishna Stores</span>
+              <span class="mini-store-dist">450 m</span>
+            </div>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+          <div class="mini-store-item">
+            <div class="mini-store-info">
+              <span class="mini-store-name">Anurag Veg</span>
+              <span class="mini-store-dist">680 m</span>
+            </div>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="categories">
+        <div class="category-item">
+          <div class="category-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+          <span class="category-label">Groceries</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon"><i class="fa-solid fa-apple-whole"></i></div>
+          <span class="category-label">Fruits & Veg</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon"><i class="fa-solid fa-cookie"></i></div>
+          <span class="category-label">Snacks & Drinks</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon"><i class="fa-solid fa-pump-soap"></i></div>
+          <span class="category-label">Household</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon"><i class="fa-solid fa-bottle-droplet"></i></div>
+          <span class="category-label">Personal Care</span>
+        </div>
+        <div class="category-item">
+          <div class="category-icon"><i class="fa-solid fa-grip"></i></div>
+          <span class="category-label">More</span>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">Nearby Stores</div>
+        <a href="#" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="horizontal-cards">
+        <div class="store-card">
+          <div class="card-image store-1-img">
+            <span class="card-badge">Fresh Mart</span>
+            <i class="fa-regular fa-heart fav-btn"></i>
+          </div>
+          <div class="card-body">
+            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 320 m</div>
+            <div class="card-title">Fresh Mart</div>
+            <div class="card-tags">Groceries • Snacks</div>
+            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.6 (120)</div>
+            <div class="offer-pill">Up to 10% off</div>
+          </div>
+        </div>
+
+        <div class="store-card">
+          <div class="card-image store-2-img">
+            <i class="fa-regular fa-heart fav-btn"></i>
+          </div>
+          <div class="card-body">
+            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 450 m</div>
+            <div class="card-title">Sri Krishna Stores</div>
+            <div class="card-tags">Groceries • Household</div>
+            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.5 (98)</div>
+            <div class="offer-pill">Special Offers</div>
+          </div>
+        </div>
+
+        <div class="store-card">
+          <div class="card-image store-3-img">
+            <i class="fa-regular fa-heart fav-btn"></i>
+          </div>
+          <div class="card-body">
+            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 680 m</div>
+            <div class="card-title">Anurag Vegetables</div>
+            <div class="card-tags">Fresh Fruits • Veg</div>
+            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.7 (76)</div>
+            <div class="offer-pill">Fresh & Local</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="promo-banner">
+        <div class="promo-content">
+          <h3>Today's Special</h3>
+          <p>Fresh Vegetables & Fruits</p>
+          <button class="promo-btn">Up to 20% Off</button>
+        </div>
+        <div class="promo-image">
+          <i class="fa-solid fa-lemon"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <a href="#" class="nav-item active">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-solid fa-receipt"></i>
+        <span>Orders</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-badge" id="cartBadge">2</span>
+        <span>Cart</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-solid fa-star"></i>
+        <span>Loyalty</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-solid fa-bars"></i>
+        <span>More</span>
+      </a>
+    </div>
   </div>
 
-  <div id="toast"></div>
-  <div id="modalRoot"></div>
-  <script src="script.js"></script>
+  <script>
+    // Interactive functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      // Favorite Button Toggle
+      const favButtons = document.querySelectorAll('.fav-btn');
+      favButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          btn.classList.toggle('fa-regular');
+          btn.classList.toggle('fa-solid');
+          btn.style.color = btn.classList.contains('fa-solid') ? '#e63946' : 'white';
+        });
+      });
+
+      // Bottom Navigation Active Switch
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          navItems.forEach(nav => nav.classList.remove('active'));
+          item.classList.add('active');
+        });
+      });
+
+      // Search Bar interaction
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const storeCards = document.querySelectorAll('.store-card');
+
+        storeCards.forEach(card => {
+          const title = card.querySelector('.card-title').textContent.toLowerCase();
+          if (title.includes(query)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+
+      // Location selector demo event
+      const locationBtn = document.getElementById('locationBtn');
+      locationBtn.addEventListener('click', () => {
+        const newLocation = prompt('Enter your location:', 'Irinjalakuda');
+        if (newLocation) {
+          locationBtn.querySelector('span').textContent = newLocation;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
-
-const stores=[
- {id:"fresh",name:"Fresh Mart",distance:"320 m",rating:"4.6",reviews:"120",category:"Groceries • Snacks • Beverages",offer:"Up to 10% off",open:"Open until 9:30 PM",img:"https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80"},
- {id:"krishna",name:"Sri Krishna Stores",distance:"450 m",rating:"4.5",reviews:"98",category:"Groceries • Household • Personal Care",offer:"Special Offers",open:"Open until 9:00 PM",img:"https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=900&q=80"},
- {id:"anurag",name:"Anurag Vegetables",distance:"680 m",rating:"4.7",reviews:"76",category:"Fresh Fruits • Vegetables",offer:"Fresh & Local",open:"Open until 8:30 PM",img:"https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80"}
-];
-const products=[
- {id:"apple",name:"Apple (1 kg)",price:120,cat:"Fruits",store:"Fresh Mart",img:"https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=700&q=80",desc:"Fresh, crisp apples sourced from trusted local suppliers."},
- {id:"banana",name:"Banana (1 kg)",price:40,cat:"Fruits",store:"Fresh Mart",img:"https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=700&q=80",desc:"Naturally sweet bananas, perfect for everyday snacking."},
- {id:"tomato",name:"Tomato (1 kg)",price:30,cat:"Vegetables",store:"Fresh Mart",img:"https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=700&q=80",desc:"Fresh local tomatoes selected daily."},
- {id:"onion",name:"Onion (1 kg)",price:28,cat:"Vegetables",store:"Fresh Mart",img:"https://images.unsplash.com/photo-1508747703725-719777637510?auto=format&fit=crop&w=700&q=80",desc:"Everyday kitchen essential from local farms."},
- {id:"carrot",name:"Carrot (1 kg)",price:25,cat:"Vegetables",store:"Fresh Mart",img:"https://images.unsplash.com/photo-1445282768818-728615cc910a?auto=format&fit=crop&w=700&q=80",desc:"Crunchy fresh carrots, locally sourced."},
- {id:"juice",name:"Fresh Juice",price:60,cat:"Beverages",store:"Fresh Mart",img:"https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=700&q=80",desc:"Freshly prepared seasonal fruit juice."}
-];
-let cart=JSON.parse(localStorage.getItem("locoCart")||"[]");
-let favs=JSON.parse(localStorage.getItem("locoFavs")||"[]");
-let orders=JSON.parse(localStorage.getItem("locoOrders")||"[]");
-let currentRoute="home", selectedSlot="02:00 PM – 04:00 PM";
-
-const app=document.getElementById("app");
-const badge=document.getElementById("cartBadge");
-const toast=document.getElementById("toast");
-const backBtn=document.getElementById("backBtn");
-
-function save(){localStorage.setItem("locoCart",JSON.stringify(cart));localStorage.setItem("locoFavs",JSON.stringify(favs));localStorage.setItem("locoOrders",JSON.stringify(orders));updateBadge()}
-function updateBadge(){badge.textContent=cart.reduce((s,x)=>s+x.qty,0);badge.style.display=cart.length?"grid":"none"}
-function money(n){return "₹"+n}
-function store(id){return stores.find(s=>s.id===id)}
-function product(id){return products.find(p=>p.id===id)}
-function toastMsg(msg){toast.textContent=msg;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),1800)}
-function nav(route){currentRoute=route;render(route);window.scrollTo({top:0,behavior:"smooth"})}
-function setActive(route){document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.route===route))}
-function goBack(){ if(["home","stores","orders","loyalty","profile"].includes(currentRoute)) return; nav("home") }
-
-function storeCard(s){
- return `<article class="store-card" onclick="nav('store-${s.id}')">
-  <div class="store-img" style="background-image:url('${s.img}')"><button class="fav" onclick="event.stopPropagation();toggleFav('${s.id}')">${favs.includes(s.id)?"♥":"♡"}</button></div>
-  <div class="store-info"><h3>${s.name}</h3><div class="meta">⌖ ${s.distance}</div><div class="meta">★ ${s.rating} (${s.reviews})</div><div class="meta">${s.category}</div><span class="offer">${s.offer}</span></div>
- </article>`
-}
-function storeListCard(s){
- return `<article class="store-list-card" onclick="nav('store-${s.id}')">
-  <div class="store-img" style="background-image:url('${s.img}')"></div>
-  <div class="store-info"><h3>${s.name}</h3><div class="meta">⌖ ${s.distance} • ★ ${s.rating} (${s.reviews})</div><div class="meta">${s.category}</div><span class="offer">${s.offer}</span></div>
- </article>`
-}
-function productCard(p){
- return `<article class="product-card" onclick="nav('product-${p.id}')">
-  <div class="product-img" style="background-image:url('${p.img}')"></div>
-  <div class="product-body"><h3>${p.name}</h3><div class="price">${money(p.price)}</div><div class="meta">Fresh • Local</div>
-  <div class="product-bottom"><span class="rating">★ 4.6</span><button class="small-btn" onclick="event.stopPropagation();addToCart('${p.id}')">Add +</button></div></div>
- </article>`
-}
-
-function home(){
- return `<div class="fade">
-  <div class="search"><span>⌕</span><input id="homeSearch" placeholder="Search for products or nearby stores..." oninput="quickSearch(this.value)"><span>◉</span></div>
-  <section class="hero"><h1>Your Neighbourhood Stores,<br>Now Online!</h1><p>Fresh products • Better offers<br>More convenience</p><button class="pill-btn" onclick="nav('stores')">Explore Nearby Stores →</button></section>
-  <div id="searchResults"></div>
-  <div class="section-head"><h2>Categories</h2><button class="link" onclick="nav('stores')">View all →</button></div>
-  <div class="categories">
-   ${[["🧺","Groceries"],["🍎","Fruits"],["🥕","Vegetables"],["🥤","Beverages"],["🧴","Household"],["✚","More"]].map((c,i)=>`<button class="cat ${i===0?"active":""}" onclick="filterCategory('${c[1]}')"><div class="circle">${c[0]}</div>${c[1]}</button>`).join("")}
-  </div>
-  <div class="section-head"><h2>Nearby Stores</h2><button class="link" onclick="nav('stores')">View all →</button></div>
-  <div class="store-row">${stores.map(storeCard).join("")}</div>
-  <section class="banner"><h3>Today's Special</h3><p>Fresh vegetables & fruits</p><button class="pill-btn" onclick="nav('products')">Up to 20% Off</button></section>
- </div>`
-}
-function quickSearch(q){
- const box=document.getElementById("searchResults"); if(!q.trim()){box.innerHTML="";return}
- const ql=q.toLowerCase();
- const ps=products.filter(p=>p.name.toLowerCase().includes(ql));
- const ss=stores.filter(s=>s.name.toLowerCase().includes(ql));
- box.innerHTML=`<div class="section-head"><h2>Search results</h2></div>${ss.length?`<div class="list">${ss.map(storeListCard).join("")}</div>`:""}${ps.length?`<div class="product-grid" style="margin-top:12px">${ps.map(productCard).join("")}</div>`:""}${!ps.length&&!ss.length?`<p class="meta">No results found for "${q}"</p>`:""}`;
-}
-function filterCategory(c){nav("products");setTimeout(()=>{const el=document.getElementById("productFilter");if(el){el.value=c;filterProducts(c)}},20)}
-function storesPage(){
- return `<div class="fade"><div class="page-title"><h1>Nearby Stores</h1><p>Discover local shops around Irinjalakuda.</p></div>
- <div class="search"><span>⌕</span><input placeholder="Search stores..." oninput="filterStores(this.value)"></div>
- <div class="filter-row">${["All","Groceries","Fruits","Vegetables","Household","Personal Care"].map((x,i)=>`<button class="filter ${i===0?"active":""}" onclick="filterStores('${x}',this)">${x}</button>`).join("")}</div>
- <div class="list" id="storeResults">${stores.map(storeListCard).join("")}</div></div>`
-}
-function filterStores(q,btn){
- const results=stores.filter(s=>{const text=(s.name+" "+s.category).toLowerCase();return text.includes((q||"all").toLowerCase())});
- if(btn){document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
- document.getElementById("storeResults").innerHTML=results.length?results.map(storeListCard).join(""):`<p class="meta">No stores found.</p>`;
-}
-function storePage(id){
- const s=store(id); return `<div class="fade">
- <div class="detail-img" style="background-image:url('${s.img}')"></div>
- <div class="detail-card"><h1>${s.name}</h1><div class="rating">★ ${s.rating} (${s.reviews})</div><p class="meta">⌖ ${s.distance} • ${s.open}</p>
- <div class="action-row"><button class="filter" onclick="toastMsg('Calling ${s.name}…')">☎ Call</button><button class="filter" onclick="toastMsg('Directions opened (demo)')">⌖ Directions</button><button class="filter" onclick="toastMsg('Share link copied')">↗ Share</button></div>
- <div class="section-head"><h2>Featured Products</h2><button class="link" onclick="nav('products')">View all →</button></div>
- <div class="product-grid">${products.slice(0,4).map(productCard).join("")}</div>
- <div class="section-head"><h2>About</h2></div><p class="meta">A neighbourhood store serving fresh everyday essentials with friendly local service.</p>
- </div></div>`
-}
-function productsPage(){
- return `<div class="fade"><div class="page-title"><h1>Fruits & Vegetables</h1><p>Fresh products available at nearby stores.</p></div>
- <div class="filter-row" id="productFilters">${["All","Fruits","Vegetables","Beverages"].map((x,i)=>`<button class="filter ${i===0?"active":""}" onclick="filterProducts('${x}',this)">${x}</button>`).join("")}</div>
- <div class="product-grid" id="productResults">${products.map(productCard).join("")}</div></div>`
-}
-function filterProducts(c,btn){
- const ps=c==="All"?products:products.filter(p=>p.cat.toLowerCase()===c.toLowerCase());
- if(btn){document.querySelectorAll("#productFilters .filter").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
- document.getElementById("productResults").innerHTML=ps.length?ps.map(productCard).join(""):`<p class="meta">No products found.</p>`;
-}
-function productPage(id){
- const p=product(id); return `<div class="fade"><div class="detail-img" style="background-image:url('${p.img}')"></div>
- <div class="detail-card"><h1>${p.name}</h1><div class="price">${money(p.price)}</div><p class="rating">★ 4.6 (120)</p><p class="meta">Fresh • Local • Premium Quality</p>
- <p>${p.desc}</p><div class="section-head"><h2>Quantity</h2><div class="qty"><button onclick="changeTempQty(-1)">−</button><strong id="tempQty">1</strong><button onclick="changeTempQty(1)">+</button></div></div>
- <div class="action-row"><button class="primary-btn" onclick="addToCart('${p.id}')">Add to Cart</button><button class="filter" onclick="addToCart('${p.id}');nav('cart')">Reserve at Store</button></div></div></div>`
-}
-let tempQty=1;
-function changeTempQty(n){tempQty=Math.max(1,tempQty+n);const x=document.getElementById("tempQty");if(x)x.textContent=tempQty}
-function addToCart(id){
- const p=product(id);let item=cart.find(x=>x.id===id);
- if(item)item.qty+=tempQty;else cart.push({id,qty:tempQty});
- tempQty=1;save();toastMsg(`${p.name} added to cart ✓`)
-}
-function cartPage(){
- if(!cart.length)return `<div class="fade success"><div class="check">🛒</div><h1>Your cart is empty</h1><p class="meta">Explore nearby stores and add something you like.</p><button class="primary-btn" onclick="nav('stores')">Explore Stores</button></div>`;
- const subtotal=cart.reduce((s,x)=>s+product(x.id).price*x.qty,0);
- return `<div class="fade"><div class="page-title"><h1>Your Cart</h1><p>${cart.reduce((s,x)=>s+x.qty,0)} items selected for reservation.</p></div>
- ${cart.map(x=>{const p=product(x.id);return `<div class="cart-item"><div class="thumb" style="background-image:url('${p.img}')"></div><div style="flex:1"><h3>${p.name}</h3><div class="price">${money(p.price)}</div><div class="cart-controls"><button onclick="cartQty('${p.id}',-1)">−</button><strong>${x.qty}</strong><button onclick="cartQty('${p.id}',1)">+</button><button onclick="removeCart('${p.id}')" style="margin-left:auto">✕</button></div></div></div>`}).join("")}
- <div class="summary"><div class="sumline"><span>Subtotal</span><strong>${money(subtotal)}</strong></div><div class="sumline"><span>Reservation fee</span><strong>₹0</strong></div><div class="sumline total"><span>Total</span><strong>${money(subtotal)}</strong></div><button class="primary-btn" style="width:100%;margin-top:10px" onclick="nav('reservation')">Proceed to Reservation</button></div></div>`
-}
-function cartQty(id,n){const x=cart.find(x=>x.id===id);x.qty+=n;if(x.qty<=0)cart=cart.filter(y=>y.id!==id);save();nav("cart")}
-function removeCart(id){cart=cart.filter(x=>x.id!==id);save();toastMsg("Item removed from cart");nav("cart")}
-function reservationPage(){
- const subtotal=cart.reduce((s,x)=>s+product(x.id).price*x.qty,0);
- return `<div class="fade"><div class="page-title"><h1>Reserve & Pick Up</h1><p>Choose a convenient time at your local store.</p></div>
- <div class="summary"><strong>Pickup Store</strong><h2 style="margin:7px 0;color:var(--plum)">Fresh Mart</h2><span class="meta">⌖ 320 m away</span></div>
- <div class="section-head"><h2>Choose Reservation Slot</h2></div>
- <div class="filter-row"><button class="filter active">Today</button><button class="filter">Tomorrow</button></div>
- <div class="slot-grid">${["10:00 AM – 12:00 PM","12:00 PM – 02:00 PM","02:00 PM – 04:00 PM","04:00 PM – 06:00 PM"].map(x=>`<button class="slot ${selectedSlot===x?"selected":""}" onclick="selectSlot('${x}')">${x}</button>`).join("")}</div>
- <div class="summary"><div class="sumline"><span>Items</span><strong>${money(subtotal)}</strong></div><div class="sumline"><span>Held for</span><strong>2 hours</strong></div><button class="primary-btn" style="width:100%;margin-top:10px" onclick="confirmReservation()">Confirm Reservation</button></div></div>`
-}
-function selectSlot(x){selectedSlot=x;nav("reservation")}
-function confirmReservation(){
- const id="LOCO-"+Math.floor(100000+Math.random()*899999);
- orders.unshift({id,store:"Fresh Mart",slot:selectedSlot,status:"Reserved",date:"Today"});
- cart=[];save();nav("confirmation-"+id)
-}
-function confirmationPage(id){
- const o=orders[0];return `<div class="fade success"><div class="check">✓</div><h1>Reservation Confirmed!</h1><p class="meta">Your items are reserved at ${o.store}.</p>
- <div class="summary"><div class="sumline"><span>Reservation ID</span><strong>${id}</strong></div><div class="sumline"><span>Pickup Time</span><strong>${o.slot}</strong></div><div class="sumline"><span>Store</span><strong>${o.store}</strong></div></div>
- <button class="primary-btn" style="width:100%;margin-top:12px" onclick="nav('orders')">View Order</button><button class="filter" style="width:100%;margin-top:9px" onclick="nav('home')">Back to Home</button></div>`
-}
-function ordersPage(){
- return `<div class="fade"><div class="page-title"><h1>My Orders</h1><p>Track your reservations and pickups.</p></div>
- ${orders.length?orders.map(o=>`<div class="order-card"><div style="display:flex;justify-content:space-between"><strong>${o.store}</strong><span class="status">${o.status}</span></div><p class="meta">${o.date} • ${o.slot}</p><p class="meta">Reservation ID: ${o.id}</p><button class="filter" onclick="toastMsg('Order details opened')">View Details →</button></div>`).join(""):`<div class="summary"><h3>No orders yet</h3><p class="meta">Your reservations will appear here.</p><button class="primary-btn" onclick="nav('stores')">Find a Store</button></div>`}
- </div>`
-}
-function loyaltyPage(){
- return `<div class="fade"><div class="page-title"><h1>Loco Loyalty</h1><p>Rewards for choosing local.</p></div>
- <div class="points"><span>Current Points</span><strong>250</strong><span>250 / 500 points to next reward</span><div class="progress"><i></i></div></div>
- <div class="section-head"><h2>Rewards</h2></div>
- <div class="order-card"><strong>₹50 Off</strong><p class="meta">500 points</p><span class="status">250 more points</span></div>
- <div class="order-card"><strong>₹100 Off</strong><p class="meta">900 points</p><span class="status">650 more points</span></div>
- <div class="section-head"><h2>Recent Points</h2></div>
- <div class="order-card"><div class="sumline"><span>Fresh Mart</span><strong>+10 pts</strong></div><div class="sumline"><span>Sri Krishna Stores</span><strong>+5 pts</strong></div></div>
- </div>`
-}
-function profilePage(){
- return `<div class="fade"><div class="profile-card"><div class="avatar">☺</div><div><h2 style="margin:0;color:var(--plum)">Jishan MJ</h2><p class="meta">Local shopper • 250 loyalty points</p></div></div>
- <div class="menu-card">${["My Orders","Loyalty Points","Addresses","Payment Methods","Notifications","Help & Support","Settings"].map((x,i)=>`<button class="menu-row" onclick="menuAction('${x}')"><span>${["▤","☆","⌖","▣","♧","?","⚙"][i]} &nbsp;${x}</span><span>›</span></button>`).join("")}</div></div>`
-}
-function menuAction(x){if(x==="My Orders")nav("orders");else if(x==="Loyalty Points")nav("loyalty");else toastMsg(`${x} — demo screen`)}
-function toggleFav(id){if(favs.includes(id))favs=favs.filter(x=>x!==id);else favs.push(id);save();toastMsg(favs.includes(id)?"Added to favourites ♥":"Removed from favourites");render(currentRoute)}
-function render(route=currentRoute){
- setActive(route.split("-")[0]);
- backBtn.style.visibility=["home","stores","orders","loyalty","profile"].includes(route)?"hidden":"visible";
- let html;
- if(route==="home")html=home();
- else if(route==="stores")html=storesPage();
- else if(route==="products")html=productsPage();
- else if(route==="cart")html=cartPage();
- else if(route==="reservation")html=reservationPage();
- else if(route==="orders")html=ordersPage();
- else if(route==="loyalty")html=loyaltyPage();
- else if(route==="profile")html=profilePage();
- else if(route.startsWith("store-"))html=storePage(route.split("-")[1]);
- else if(route.startsWith("product-"))html=productPage(route.split("-")[1]);
- else if(route.startsWith("confirmation-"))html=confirmationPage(route.replace("confirmation-",""));
- else html=home();
- app.innerHTML=html;updateBadge();
-}
-document.querySelectorAll(".nav-item").forEach(b=>b.addEventListener("click",()=>nav(b.dataset.route)));
-backBtn.addEventListener("click",goBack);
-document.getElementById("profileQuick").addEventListener("click",()=>nav("profile"));
-updateBadge();render("home");
