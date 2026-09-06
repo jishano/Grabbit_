@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grabbit App UI</title>
+  <title>Grabbit - Local Kirana App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -37,7 +37,107 @@
       position: relative;
     }
 
-    /* Top Header */
+    /* ----------------------------------
+       LOADING / WAITING SCREEN ANIMATION
+    ---------------------------------- */
+    .loader-screen {
+      position: absolute;
+      inset: 0;
+      background-color: #f7faef;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Walking Rabbit Animation Setup */
+    .walking-rabbit-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
+    }
+
+    .rabbit-body {
+      font-size: 55px;
+      color: #431c28;
+      position: absolute;
+      left: 20px;
+      top: 10px;
+      animation: rabbitBob 0.5s infinite alternate ease-in-out;
+    }
+
+    .walking-legs {
+      position: absolute;
+      bottom: 12px;
+      left: 32px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .leg {
+      width: 6px;
+      height: 18px;
+      background-color: #431c28;
+      border-radius: 4px;
+      transform-origin: top center;
+    }
+
+    .leg.left {
+      animation: legWalk 0.5s infinite alternate ease-in-out;
+    }
+
+    .leg.right {
+      animation: legWalk 0.5s infinite alternate-reverse ease-in-out;
+    }
+
+    .walking-ground {
+      width: 140px;
+      height: 3px;
+      background: repeating-linear-gradient(90deg, #431c28, #431c28 10px, transparent 10px, transparent 20px);
+      position: absolute;
+      bottom: 10px;
+      animation: groundMove 0.8s linear infinite;
+    }
+
+    @keyframes rabbitBob {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-6px); }
+    }
+
+    @keyframes legWalk {
+      0% { transform: rotate(-25deg); }
+      100% { transform: rotate(25deg); }
+    }
+
+    @keyframes groundMove {
+      0% { background-position: 0 0; }
+      100% { background-position: -20px 0; }
+    }
+
+    .loader-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #431c28;
+      margin-bottom: 4px;
+    }
+
+    .loader-tagline {
+      font-size: 13px;
+      font-weight: 600;
+      color: #5d7a3d;
+    }
+
+    /* ----------------------------------
+       HEADER & NAVIGATION
+    ---------------------------------- */
     .header {
       padding: 16px 20px 8px 20px;
       background-color: #f7faef;
@@ -57,7 +157,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .logo-container {
@@ -67,12 +167,12 @@
     }
 
     .logo-container i {
-      font-size: 28px;
+      font-size: 26px;
       color: #431c28;
     }
 
     .brand-title {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 800;
       color: #431c28;
       line-height: 1;
@@ -80,8 +180,9 @@
 
     .tagline {
       font-size: 10px;
-      color: #431c28;
-      font-style: italic;
+      color: #5d7a3d;
+      font-weight: 700;
+      margin-top: 2px;
     }
 
     .user-actions {
@@ -109,7 +210,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 14px;
     }
 
     /* Search Bar */
@@ -121,33 +222,30 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-top: 8px;
     }
 
-    .search-bar i {
-      color: #657551;
-    }
-
+    .search-bar i { color: #657551; }
     .search-bar input {
       border: none;
       background: transparent;
       outline: none;
       width: 100%;
       font-size: 13px;
-      color: #333;
     }
 
-    /* Scrollable Main Content */
+    /* ----------------------------------
+       MAIN CONTENT SCROLL
+    ---------------------------------- */
     .content-scroll {
       flex: 1;
       overflow-y: auto;
       padding: 0 16px 80px 16px;
       scrollbar-width: none;
     }
-    .content-scroll::-webkit-scrollbar {
-      display: none;
-    }
+    .content-scroll::-webkit-scrollbar { display: none; }
 
-    /* Map Widget Section */
+    /* Map Card Widget */
     .map-card {
       background-color: #e5edd7;
       border-radius: 16px;
@@ -155,11 +253,13 @@
       padding: 10px;
       display: flex;
       gap: 10px;
+      cursor: pointer;
+      border: 1px solid #d3e0c0;
     }
 
     .map-preview {
       flex: 1.2;
-      height: 150px;
+      height: 140px;
       background-color: #dbe6cb;
       border-radius: 12px;
       position: relative;
@@ -179,17 +279,17 @@
       gap: 3px;
     }
 
-    .pin-1 { top: 20px; left: 15px; }
-    .pin-2 { top: 35px; right: 10px; }
-    .pin-3 { bottom: 20px; left: 15px; }
-    .pin-4 { bottom: 35px; right: 30px; }
+    .pin-1 { top: 15px; left: 10px; }
+    .pin-2 { top: 30px; right: 10px; }
+    .pin-3 { bottom: 15px; left: 20px; }
 
     .user-location-pin {
       position: absolute;
-      top: 45%;
-      left: 45%;
-      width: 14px;
-      height: 14px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
       background-color: #2a75d3;
       border: 2px solid white;
       border-radius: 50%;
@@ -200,12 +300,12 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .mini-list-title {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       color: #431c28;
       display: flex;
       align-items: center;
@@ -222,20 +322,8 @@
       font-size: 10px;
     }
 
-    .mini-store-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .mini-store-name {
-      font-weight: 700;
-      color: #333;
-    }
-
-    .mini-store-dist {
-      color: #666;
-      font-size: 9px;
-    }
+    .mini-store-name { font-weight: 700; color: #333; }
+    .mini-store-dist { color: #666; font-size: 9px; }
 
     /* Categories Grid */
     .categories {
@@ -270,7 +358,6 @@
       font-size: 9px;
       font-weight: 600;
       color: #333;
-      line-height: 1.1;
     }
 
     /* Section Headers */
@@ -282,7 +369,7 @@
     }
 
     .section-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: #431c28;
     }
@@ -294,7 +381,7 @@
       text-decoration: none;
     }
 
-    /* Horizontal Stores Cards */
+    /* Recently Visited Stores Cards */
     .horizontal-cards {
       display: flex;
       gap: 12px;
@@ -314,16 +401,15 @@
     }
 
     .card-image {
-      height: 80px;
-      background-color: #ddd;
+      height: 75px;
+      background-color: #3d1b25;
       position: relative;
-      background-size: cover;
-      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5edd7;
+      font-size: 28px;
     }
-
-    .store-1-img { background-image: url('https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=300&q=80'); }
-    .store-2-img { background-image: url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=300&q=80'); }
-    .store-3-img { background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=300&q=80'); }
 
     .fav-btn {
       position: absolute;
@@ -334,102 +420,78 @@
       cursor: pointer;
     }
 
-    .card-badge {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      background-color: #c83b3b;
-      color: white;
-      font-size: 8px;
-      font-weight: 700;
-      padding: 2px 4px;
-      border-radius: 4px;
-    }
+    .card-body { padding: 8px; }
+    .card-distance { font-size: 9px; color: #666; margin-bottom: 2px; }
+    .card-title { font-size: 11px; font-weight: 700; color: #222; margin-bottom: 2px; }
+    .card-tags { font-size: 8px; color: #777; margin-bottom: 4px; }
+    .card-rating { font-size: 9px; font-weight: 700; color: #333; margin-bottom: 6px; }
 
-    .card-body {
-      padding: 8px;
-    }
-
-    .card-distance {
-      font-size: 9px;
-      color: #666;
-      margin-bottom: 2px;
-    }
-
-    .card-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #222;
-      margin-bottom: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .card-tags {
-      font-size: 8px;
-      color: #777;
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .card-rating {
-      font-size: 9px;
-      font-weight: 700;
-      color: #333;
-      margin-bottom: 6px;
-    }
-
-    .offer-pill {
+    .reserve-pill {
       display: inline-block;
-      background-color: #e2f0d3;
-      color: #3c6522;
+      background-color: #431c28;
+      color: #f7faef;
       font-size: 8px;
       font-weight: 700;
-      padding: 3px 6px;
-      border-radius: 10px;
-    }
-
-    /* Banner Promo */
-    .promo-banner {
-      background: linear-gradient(135deg, #431c28 0%, #2b111a 100%);
-      border-radius: 16px;
-      padding: 14px 16px;
-      color: white;
-      margin-top: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .promo-content h3 {
-      font-size: 15px;
-      font-weight: 800;
-      margin-bottom: 2px;
-    }
-
-    .promo-content p {
-      font-size: 11px;
-      opacity: 0.9;
-      margin-bottom: 8px;
-    }
-
-    .promo-btn {
-      background-color: #f7faef;
-      color: #431c28;
-      border: none;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 9px;
-      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 8px;
+      text-align: center;
+      width: 100%;
       cursor: pointer;
     }
 
-    .promo-image {
-      font-size: 36px;
-      color: #a8d580;
+    /* Fullscreen Map Modal */
+    .map-modal {
+      position: absolute;
+      inset: 0;
+      background-color: #dbe6cb;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .map-modal.active { transform: translateY(0); }
+
+    .map-modal-header {
+      padding: 16px;
+      background-color: #f7faef;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .map-modal-title { font-size: 14px; font-weight: 800; color: #431c28; }
+
+    .close-map-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #431c28;
+      cursor: pointer;
+    }
+
+    .interactive-map-area {
+      flex: 1;
+      position: relative;
+      background-image: radial-gradient(#ccd8ba 2px, transparent 2px);
+      background-size: 20px 20px;
+    }
+
+    .map-store-pin {
+      position: absolute;
+      background-color: #431c28;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     /* Bottom Navigation */
@@ -444,7 +506,6 @@
       display: flex;
       justify-content: space-around;
       align-items: center;
-      padding-bottom: 6px;
     }
 
     .nav-item {
@@ -456,38 +517,28 @@
       text-decoration: none;
       font-size: 9px;
       font-weight: 600;
-      cursor: pointer;
-      position: relative;
     }
 
-    .nav-item.active {
-      color: #431c28;
-    }
-
-    .nav-item i {
-      font-size: 18px;
-    }
-
-    .cart-badge {
-      position: absolute;
-      top: -4px;
-      right: 4px;
-      background-color: #431c28;
-      color: white;
-      font-size: 8px;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-    }
+    .nav-item.active { color: #431c28; }
+    .nav-item i { font-size: 18px; }
   </style>
 </head>
 <body>
 
   <div class="app-container">
+    <div class="loader-screen" id="loaderScreen">
+      <div class="walking-rabbit-container">
+        <i class="fa-solid fa-cloud-meatball rabbit-body"></i>
+        <div class="walking-legs">
+          <div class="leg left"></div>
+          <div class="leg right"></div>
+        </div>
+        <div class="walking-ground"></div>
+      </div>
+      <div class="loader-title">Grabbit</div>
+      <div class="loader-tagline">Find it. Reserve it. Pick it up.</div>
+    </div>
+
     <div class="header">
       <div class="status-bar">
         <span>9:41</span>
@@ -503,11 +554,11 @@
           <i class="fa-solid fa-carrot"></i>
           <div>
             <div class="brand-title">Grabbit</div>
-            <div class="tagline">Bringing Freshness Closer to You</div>
+            <div class="tagline">Find it. Reserve it. Pick it up.</div>
           </div>
         </div>
         <div class="user-actions">
-          <div class="location-selector" id="locationBtn">
+          <div class="location-selector">
             <i class="fa-solid fa-location-dot"></i>
             <span>Irinjalakuda</span>
             <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
@@ -520,44 +571,34 @@
 
       <div class="search-bar">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="searchInput" placeholder="Search for products or nearby stores...">
+        <input type="text" placeholder="Search products or Kirana stores...">
         <i class="fa-solid fa-microphone"></i>
       </div>
     </div>
 
     <div class="content-scroll">
-      <div class="map-card">
+      <div class="map-card" id="mapWidget">
         <div class="map-preview">
           <div class="user-location-pin"></div>
-          <div class="map-pin pin-1"><i class="fa-solid fa-store"></i> 320 m</div>
-          <div class="map-pin pin-2"><i class="fa-solid fa-store"></i> 450 m</div>
-          <div class="map-pin pin-3"><i class="fa-solid fa-store"></i> 680 m</div>
-          <div class="map-pin pin-4"><i class="fa-solid fa-store"></i> 720 m</div>
+          <div class="map-pin pin-1"><i class="fa-solid fa-store"></i> 150m</div>
+          <div class="map-pin pin-2"><i class="fa-solid fa-store"></i> 300m</div>
+          <div class="map-pin pin-3"><i class="fa-solid fa-store"></i> 500m</div>
         </div>
         <div class="store-list-mini">
           <div class="mini-list-title">
-            <i class="fa-solid fa-location-dot"></i> Nearby Stores
+            <i class="fa-solid fa-map-location-dot"></i> Nearby Kiranas
           </div>
           <div class="mini-store-item">
-            <div class="mini-store-info">
-              <span class="mini-store-name">Fresh Mart</span>
-              <span class="mini-store-dist">320 m</span>
-            </div>
-            <i class="fa-solid fa-chevron-right"></i>
+            <span class="mini-store-name">Babu Store</span>
+            <span class="mini-store-dist">150 m</span>
           </div>
           <div class="mini-store-item">
-            <div class="mini-store-info">
-              <span class="mini-store-name">Sri Krishna Stores</span>
-              <span class="mini-store-dist">450 m</span>
-            </div>
-            <i class="fa-solid fa-chevron-right"></i>
+            <span class="mini-store-name">Lakshmi Kirana</span>
+            <span class="mini-store-dist">300 m</span>
           </div>
           <div class="mini-store-item">
-            <div class="mini-store-info">
-              <span class="mini-store-name">Anurag Veg</span>
-              <span class="mini-store-dist">680 m</span>
-            </div>
-            <i class="fa-solid fa-chevron-right"></i>
+            <span class="mini-store-name">Sharma General</span>
+            <span class="mini-store-dist">500 m</span>
           </div>
         </div>
       </div>
@@ -569,11 +610,11 @@
         </div>
         <div class="category-item">
           <div class="category-icon"><i class="fa-solid fa-apple-whole"></i></div>
-          <span class="category-label">Fruits & Veg</span>
+          <span class="category-label">Fruits</span>
         </div>
         <div class="category-item">
           <div class="category-icon"><i class="fa-solid fa-cookie"></i></div>
-          <span class="category-label">Snacks & Drinks</span>
+          <span class="category-label">Snacks</span>
         </div>
         <div class="category-item">
           <div class="category-icon"><i class="fa-solid fa-pump-soap"></i></div>
@@ -581,7 +622,7 @@
         </div>
         <div class="category-item">
           <div class="category-icon"><i class="fa-solid fa-bottle-droplet"></i></div>
-          <span class="category-label">Personal Care</span>
+          <span class="category-label">Care</span>
         </div>
         <div class="category-item">
           <div class="category-icon"><i class="fa-solid fa-grip"></i></div>
@@ -590,60 +631,69 @@
       </div>
 
       <div class="section-header">
-        <div class="section-title">Nearby Stores</div>
+        <div class="section-title">Recently Visited Stores</div>
         <a href="#" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
       </div>
 
       <div class="horizontal-cards">
         <div class="store-card">
-          <div class="card-image store-1-img">
-            <span class="card-badge">Fresh Mart</span>
+          <div class="card-image">
+            <i class="fa-solid fa-shop"></i>
             <i class="fa-regular fa-heart fav-btn"></i>
           </div>
           <div class="card-body">
-            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 320 m</div>
-            <div class="card-title">Fresh Mart</div>
-            <div class="card-tags">Groceries • Snacks</div>
-            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.6 (120)</div>
-            <div class="offer-pill">Up to 10% off</div>
+            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 150 m</div>
+            <div class="card-title">Babu Store</div>
+            <div class="card-tags">Provisions • Rice • Oil</div>
+            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.8</div>
+            <div class="reserve-pill">Reserve Items</div>
           </div>
         </div>
 
         <div class="store-card">
-          <div class="card-image store-2-img">
+          <div class="card-image">
+            <i class="fa-solid fa-store"></i>
             <i class="fa-regular fa-heart fav-btn"></i>
           </div>
           <div class="card-body">
-            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 450 m</div>
-            <div class="card-title">Sri Krishna Stores</div>
-            <div class="card-tags">Groceries • Household</div>
-            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.5 (98)</div>
-            <div class="offer-pill">Special Offers</div>
+            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 300 m</div>
+            <div class="card-title">Lakshmi Kirana</div>
+            <div class="card-tags">Spices • Dairy</div>
+            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.6</div>
+            <div class="reserve-pill">Reserve Items</div>
           </div>
         </div>
 
         <div class="store-card">
-          <div class="card-image store-3-img">
+          <div class="card-image">
+            <i class="fa-solid fa-house-chimney-window"></i>
             <i class="fa-regular fa-heart fav-btn"></i>
           </div>
           <div class="card-body">
-            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 680 m</div>
-            <div class="card-title">Anurag Vegetables</div>
-            <div class="card-tags">Fresh Fruits • Veg</div>
-            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.7 (76)</div>
-            <div class="offer-pill">Fresh & Local</div>
+            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 500 m</div>
+            <div class="card-title">Sharma General</div>
+            <div class="card-tags">Daily Essentials</div>
+            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.5</div>
+            <div class="reserve-pill">Reserve Items</div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="promo-banner">
-        <div class="promo-content">
-          <h3>Today's Special</h3>
-          <p>Fresh Vegetables & Fruits</p>
-          <button class="promo-btn">Up to 20% Off</button>
+    <div class="map-modal" id="mapModal">
+      <div class="map-modal-header">
+        <span class="map-modal-title"><i class="fa-solid fa-map"></i> Nearby Kirana Map</span>
+        <button class="close-map-btn" id="closeMapBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="interactive-map-area">
+        <div class="map-store-pin" style="top: 30%; left: 20%;">
+          <i class="fa-solid fa-shop"></i> Babu Store (150m)
         </div>
-        <div class="promo-image">
-          <i class="fa-solid fa-lemon"></i>
+        <div class="map-store-pin" style="top: 50%; left: 60%;">
+          <i class="fa-solid fa-shop"></i> Lakshmi Kirana (300m)
+        </div>
+        <div class="map-store-pin" style="top: 70%; left: 35%;">
+          <i class="fa-solid fa-shop"></i> Sharma General (500m)
         </div>
       </div>
     </div>
@@ -659,12 +709,7 @@
       </a>
       <a href="#" class="nav-item">
         <i class="fa-solid fa-cart-shopping"></i>
-        <span class="cart-badge" id="cartBadge">2</span>
         <span>Cart</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-star"></i>
-        <span>Loyalty</span>
       </a>
       <a href="#" class="nav-item">
         <i class="fa-solid fa-bars"></i>
@@ -674,8 +719,26 @@
   </div>
 
   <script>
-    // Interactive functionality
     document.addEventListener('DOMContentLoaded', () => {
+      // Hide animated loader screen after 2.5 seconds
+      setTimeout(() => {
+        const loader = document.getElementById('loaderScreen');
+        loader.classList.add('hidden');
+      }, 2500);
+
+      // Open Map Modal on widget click
+      const mapWidget = document.getElementById('mapWidget');
+      const mapModal = document.getElementById('mapModal');
+      const closeMapBtn = document.getElementById('closeMapBtn');
+
+      mapWidget.addEventListener('click', () => {
+        mapModal.classList.add('active');
+      });
+
+      closeMapBtn.addEventListener('click', () => {
+        mapModal.classList.remove('active');
+      });
+
       // Favorite Button Toggle
       const favButtons = document.querySelectorAll('.fav-btn');
       favButtons.forEach(btn => {
@@ -685,41 +748,6 @@
           btn.classList.toggle('fa-solid');
           btn.style.color = btn.classList.contains('fa-solid') ? '#e63946' : 'white';
         });
-      });
-
-      // Bottom Navigation Active Switch
-      const navItems = document.querySelectorAll('.nav-item');
-      navItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-          e.preventDefault();
-          navItems.forEach(nav => nav.classList.remove('active'));
-          item.classList.add('active');
-        });
-      });
-
-      // Search Bar interaction
-      const searchInput = document.getElementById('searchInput');
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        const storeCards = document.querySelectorAll('.store-card');
-
-        storeCards.forEach(card => {
-          const title = card.querySelector('.card-title').textContent.toLowerCase();
-          if (title.includes(query)) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-
-      // Location selector demo event
-      const locationBtn = document.getElementById('locationBtn');
-      locationBtn.addEventListener('click', () => {
-        const newLocation = prompt('Enter your location:', 'Irinjalakuda');
-        if (newLocation) {
-          locationBtn.querySelector('span').textContent = newLocation;
-        }
       });
     });
   </script>
