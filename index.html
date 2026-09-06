@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grabbit - Local Kirana App</title>
+  <title>Grabbit - Find it. Reserve it. Pick it up.</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -14,7 +14,7 @@
     }
 
     body {
-      background-color: #f0f4ec;
+      background-color: #d1dbc2;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -22,15 +22,15 @@
       padding: 20px;
     }
 
-    /* Mobile Container Frame */
+    /* Outer Phone Frame */
     .app-container {
       width: 100%;
-      max-width: 412px;
-      height: 870px;
-      background-color: #f7faef;
+      max-width: 380px;
+      height: 760px;
+      background-color: #f2f6e9;
       border-radius: 40px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      border: 10px solid #1c1c1c;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 8px solid #3d1020;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -38,716 +38,451 @@
     }
 
     /* ----------------------------------
-       LOADING / WAITING SCREEN ANIMATION
+       1. WALKING RABBIT SPLASH/LOADING
     ---------------------------------- */
-    .loader-screen {
+    .splash-screen {
       position: absolute;
       inset: 0;
-      background-color: #f7faef;
+      background-color: #e4eed4;
       z-index: 999;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.6s ease, visibility 0.6s;
     }
 
-    .loader-screen.hidden {
+    .splash-screen.hidden {
       opacity: 0;
-      pointer-events: none;
+      visibility: hidden;
     }
 
-    /* Walking Rabbit Animation Setup */
-    .walking-rabbit-container {
+    /* Smooth CSS Walking Rabbit Animation */
+    .rabbit-character {
       position: relative;
-      width: 100px;
-      height: 100px;
-      margin-bottom: 20px;
-    }
-
-    .rabbit-body {
-      font-size: 55px;
-      color: #431c28;
-      position: absolute;
-      left: 20px;
-      top: 10px;
-      animation: rabbitBob 0.5s infinite alternate ease-in-out;
-    }
-
-    .walking-legs {
-      position: absolute;
-      bottom: 12px;
-      left: 32px;
+      width: 120px;
+      height: 120px;
       display: flex;
-      gap: 12px;
+      justify-content: center;
+      align-items: center;
     }
 
-    .leg {
-      width: 6px;
-      height: 18px;
-      background-color: #431c28;
-      border-radius: 4px;
-      transform-origin: top center;
+    .rabbit-icon {
+      font-size: 70px;
+      color: #3d1020;
+      animation: rabbitWalk 0.6s infinite alternate ease-in-out;
     }
 
-    .leg.left {
-      animation: legWalk 0.5s infinite alternate ease-in-out;
-    }
-
-    .leg.right {
-      animation: legWalk 0.5s infinite alternate-reverse ease-in-out;
-    }
-
-    .walking-ground {
-      width: 140px;
+    .ground-line {
+      width: 160px;
       height: 3px;
-      background: repeating-linear-gradient(90deg, #431c28, #431c28 10px, transparent 10px, transparent 20px);
-      position: absolute;
-      bottom: 10px;
-      animation: groundMove 0.8s linear infinite;
+      background: repeating-linear-gradient(90deg, #3d1020, #3d1020 12px, transparent 12px, transparent 24px);
+      margin-top: -10px;
+      animation: groundScroll 0.6s linear infinite;
     }
 
-    @keyframes rabbitBob {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-6px); }
+    @keyframes rabbitWalk {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(-3deg); }
+      100% { transform: translateY(0) rotate(3deg); }
     }
 
-    @keyframes legWalk {
-      0% { transform: rotate(-25deg); }
-      100% { transform: rotate(25deg); }
-    }
-
-    @keyframes groundMove {
+    @keyframes groundScroll {
       0% { background-position: 0 0; }
-      100% { background-position: -20px 0; }
+      100% { background-position: -24px 0; }
     }
 
-    .loader-title {
-      font-size: 28px;
+    .brand-title-large {
+      font-size: 36px;
       font-weight: 800;
-      color: #431c28;
-      margin-bottom: 4px;
+      color: #3d1020;
+      margin-top: 15px;
     }
 
-    .loader-tagline {
+    .brand-tagline {
       font-size: 13px;
-      font-weight: 600;
-      color: #5d7a3d;
+      font-weight: 700;
+      color: #3d1020;
+      margin-top: 5px;
     }
 
     /* ----------------------------------
-       HEADER & NAVIGATION
+       2. MAIN APP CONTENT
     ---------------------------------- */
-    .header {
-      padding: 16px 20px 8px 20px;
-      background-color: #f7faef;
-    }
-
     .status-bar {
+      padding: 12px 20px 4px 20px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      font-weight: 600;
-      color: #2b1d1d;
-      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #3d1020;
     }
 
-    .top-nav {
+    .app-header {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      margin-bottom: 8px;
+      padding: 10px 0 15px 0;
     }
 
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .header-logo {
+      font-size: 32px;
+      color: #3d1020;
     }
 
-    .logo-container i {
-      font-size: 26px;
-      color: #431c28;
-    }
-
-    .brand-title {
+    .header-title {
       font-size: 24px;
       font-weight: 800;
-      color: #431c28;
+      color: #3d1020;
       line-height: 1;
     }
 
-    .tagline {
-      font-size: 10px;
-      color: #5d7a3d;
-      font-weight: 700;
-      margin-top: 2px;
-    }
-
-    .user-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .location-selector {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 13px;
-      font-weight: 700;
-      color: #431c28;
-      cursor: pointer;
-    }
-
-    .profile-icon {
-      width: 32px;
-      height: 32px;
-      background-color: #431c28;
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
-
-    /* Search Bar */
-    .search-bar {
-      background-color: #edf2e1;
-      border: 1px solid #d8e2c8;
-      border-radius: 24px;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .search-bar i { color: #657551; }
-    .search-bar input {
-      border: none;
-      background: transparent;
-      outline: none;
-      width: 100%;
-      font-size: 13px;
-    }
-
-    /* ----------------------------------
-       MAIN CONTENT SCROLL
-    ---------------------------------- */
-    .content-scroll {
+    .main-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 0 16px 80px 16px;
+      padding: 0 16px 20px 16px;
       scrollbar-width: none;
     }
-    .content-scroll::-webkit-scrollbar { display: none; }
+    .main-scroll::-webkit-scrollbar { display: none; }
 
-    /* Map Card Widget */
-    .map-card {
-      background-color: #e5edd7;
+    .section-card {
+      background-color: #ffffff;
       border-radius: 16px;
-      margin-top: 12px;
-      padding: 10px;
-      display: flex;
-      gap: 10px;
-      cursor: pointer;
-      border: 1px solid #d3e0c0;
+      padding: 14px;
+      margin-bottom: 14px;
+      border: 1px solid #dbe6cb;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
     }
 
-    .map-preview {
-      flex: 1.2;
-      height: 140px;
-      background-color: #dbe6cb;
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid #ccd8ba;
-    }
-
-    .map-pin {
-      position: absolute;
-      background-color: #431c28;
-      color: white;
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
-
-    .pin-1 { top: 15px; left: 10px; }
-    .pin-2 { top: 30px; right: 10px; }
-    .pin-3 { bottom: 15px; left: 20px; }
-
-    .user-location-pin {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 12px;
-      height: 12px;
-      background-color: #2a75d3;
-      border: 2px solid white;
-      border-radius: 50%;
-      box-shadow: 0 0 0 6px rgba(42, 117, 211, 0.2);
-    }
-
-    .store-list-mini {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .mini-list-title {
+    .section-heading {
       font-size: 12px;
       font-weight: 800;
-      color: #431c28;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .mini-store-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #f7faef;
-      padding: 6px 8px;
-      border-radius: 8px;
-      font-size: 10px;
-    }
-
-    .mini-store-name { font-weight: 700; color: #333; }
-    .mini-store-dist { color: #666; font-size: 9px; }
-
-    /* Categories Grid */
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 6px;
-      margin: 16px 0;
-      text-align: center;
-    }
-
-    .category-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-    }
-
-    .category-icon {
-      width: 44px;
-      height: 44px;
-      background-color: #e5edd7;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #431c28;
-      font-size: 18px;
-    }
-
-    .category-label {
-      font-size: 9px;
-      font-weight: 600;
-      color: #333;
-    }
-
-    /* Section Headers */
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      color: #3d1020;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 10px;
     }
 
-    .section-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: #431c28;
-    }
-
-    .view-all {
-      font-size: 11px;
-      font-weight: 700;
-      color: #5d7a3d;
-      text-decoration: none;
-    }
-
-    /* Recently Visited Stores Cards */
-    .horizontal-cards {
+    /* List Items */
+    .store-row {
       display: flex;
+      align-items: center;
       gap: 12px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      scrollbar-width: none;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f4ea;
     }
 
-    .store-card {
-      min-width: 140px;
-      width: 140px;
-      background-color: #fff;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      border: 1px solid #eef2e6;
-    }
+    .store-row:last-child { border-bottom: none; }
 
-    .card-image {
-      height: 75px;
-      background-color: #3d1b25;
-      position: relative;
+    .store-icon-box {
+      width: 36px;
+      height: 36px;
+      background-color: #f2f6e9;
+      border: 1px solid #3d1020;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #e5edd7;
-      font-size: 28px;
+      color: #3d1020;
+      font-size: 16px;
     }
 
-    .fav-btn {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      color: white;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .card-body { padding: 8px; }
-    .card-distance { font-size: 9px; color: #666; margin-bottom: 2px; }
-    .card-title { font-size: 11px; font-weight: 700; color: #222; margin-bottom: 2px; }
-    .card-tags { font-size: 8px; color: #777; margin-bottom: 4px; }
-    .card-rating { font-size: 9px; font-weight: 700; color: #333; margin-bottom: 6px; }
-
-    .reserve-pill {
-      display: inline-block;
-      background-color: #431c28;
-      color: #f7faef;
-      font-size: 8px;
+    .store-name-text {
+      font-size: 13px;
       font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 8px;
-      text-align: center;
-      width: 100%;
-      cursor: pointer;
+      color: #3d1020;
     }
 
-    /* Fullscreen Map Modal */
-    .map-modal {
-      position: absolute;
-      inset: 0;
+    /* Interactive Map Widget */
+    .map-preview-widget {
+      height: 150px;
       background-color: #dbe6cb;
-      z-index: 500;
-      display: flex;
-      flex-direction: column;
-      transform: translateY(100%);
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .map-modal.active { transform: translateY(0); }
-
-    .map-modal-header {
-      padding: 16px;
-      background-color: #f7faef;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .map-modal-title { font-size: 14px; font-weight: 800; color: #431c28; }
-
-    .close-map-btn {
-      background: none;
-      border: none;
-      font-size: 18px;
-      color: #431c28;
-      cursor: pointer;
-    }
-
-    .interactive-map-area {
-      flex: 1;
+      border-radius: 12px;
+      border: 2px solid #3d1020;
       position: relative;
-      background-image: radial-gradient(#ccd8ba 2px, transparent 2px);
-      background-size: 20px 20px;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: radial-gradient(#b8c9a3 2px, transparent 2px);
+      background-size: 16px 16px;
     }
 
-    .map-store-pin {
-      position: absolute;
-      background-color: #431c28;
-      color: white;
-      padding: 6px 10px;
+    .map-click-prompt {
+      background-color: #ffffff;
+      border: 1.5px solid #3d1020;
+      padding: 6px 12px;
       border-radius: 20px;
-      font-size: 10px;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: 800;
+      color: #3d1020;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       display: flex;
       align-items: center;
       gap: 6px;
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
-    /* Bottom Navigation */
-    .bottom-nav {
+    /* ----------------------------------
+       3. FULLSCREEN MAP OVERLAY
+    ---------------------------------- */
+    .map-overlay {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background-color: #ffffff;
-      border-top: 1px solid #e0e8d5;
+      inset: 0;
+      background-color: #dbe6cb;
+      z-index: 800;
       display: flex;
-      justify-content: space-around;
-      align-items: center;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.35s ease-in-out;
+      background-image: radial-gradient(#b8c9a3 2px, transparent 2px);
+      background-size: 18px 18px;
     }
 
-    .nav-item {
+    .map-overlay.open {
+      transform: translateY(0);
+    }
+
+    .overlay-header {
+      padding: 14px;
+      background-color: #f2f6e9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #3d1020;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #3d1020;
+      cursor: pointer;
+    }
+
+    .overlay-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #3d1020;
+      text-transform: uppercase;
+    }
+
+    .map-canvas {
+      flex: 1;
+      position: relative;
+    }
+
+    /* Map Pins */
+    .map-pin-item {
+      position: absolute;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
-      color: #7a8a68;
-      text-decoration: none;
-      font-size: 9px;
-      font-weight: 600;
+      cursor: pointer;
     }
 
-    .nav-item.active { color: #431c28; }
-    .nav-item i { font-size: 18px; }
+    .pin-icon {
+      background-color: #ffffff;
+      border: 2px solid #3d1020;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3d1020;
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .pin-label {
+      background-color: #ffffff;
+      border: 1px solid #3d1020;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 800;
+      color: #3d1020;
+      margin-top: 3px;
+      white-space: nowrap;
+    }
+
+    /* Store Popup Window */
+    .store-popup {
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px;
+      background-color: #ffffff;
+      border: 2px solid #3d1020;
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      z-index: 10;
+    }
+
+    .popup-img {
+      width: 50px;
+      height: 50px;
+      background-color: #f2f6e9;
+      border: 1px solid #3d1020;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #3d1020;
+    }
+
+    .popup-info h4 {
+      font-size: 12px;
+      font-weight: 800;
+      color: #3d1020;
+    }
+
+    .popup-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .popup-btn {
+      font-size: 8px;
+      font-weight: 800;
+      padding: 4px 6px;
+      border-radius: 4px;
+      border: 1px solid #3d1020;
+      background-color: #f2f6e9;
+      color: #3d1020;
+      cursor: pointer;
+    }
+
+    .popup-btn.primary {
+      background-color: #3d1020;
+      color: #ffffff;
+    }
   </style>
 </head>
 <body>
 
   <div class="app-container">
-    <div class="loader-screen" id="loaderScreen">
-      <div class="walking-rabbit-container">
-        <i class="fa-solid fa-cloud-meatball rabbit-body"></i>
-        <div class="walking-legs">
-          <div class="leg left"></div>
-          <div class="leg right"></div>
-        </div>
-        <div class="walking-ground"></div>
+    <div class="splash-screen" id="splashScreen">
+      <div class="rabbit-character">
+        <i class="fa-solid fa-cloud-meatball rabbit-icon"></i>
       </div>
-      <div class="loader-title">Grabbit</div>
-      <div class="loader-tagline">Find it. Reserve it. Pick it up.</div>
+      <div class="ground-line"></div>
+      <div class="brand-title-large">Grabbit</div>
+      <div class="brand-tagline">Find it. Reserve it. Pick it up.</div>
     </div>
 
-    <div class="header">
-      <div class="status-bar">
-        <span>9:41</span>
-        <div>
-          <i class="fa-solid fa-signal"></i>
-          <i class="fa-solid fa-wifi" style="margin: 0 4px;"></i>
-          <i class="fa-solid fa-battery-full"></i>
-        </div>
-      </div>
-
-      <div class="top-nav">
-        <div class="logo-container">
-          <i class="fa-solid fa-carrot"></i>
-          <div>
-            <div class="brand-title">Grabbit</div>
-            <div class="tagline">Find it. Reserve it. Pick it up.</div>
-          </div>
-        </div>
-        <div class="user-actions">
-          <div class="location-selector">
-            <i class="fa-solid fa-location-dot"></i>
-            <span>Irinjalakuda</span>
-            <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
-          </div>
-          <div class="profile-icon">
-            <i class="fa-solid fa-user"></i>
-          </div>
-        </div>
-      </div>
-
-      <div class="search-bar">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Search products or Kirana stores...">
-        <i class="fa-solid fa-microphone"></i>
+    <div class="status-bar">
+      <span>9:41</span>
+      <div>
+        <i class="fa-solid fa-signal"></i>
+        <i class="fa-solid fa-wifi" style="margin: 0 3px;"></i>
+        <i class="fa-solid fa-battery-full"></i>
       </div>
     </div>
 
-    <div class="content-scroll">
-      <div class="map-card" id="mapWidget">
-        <div class="map-preview">
-          <div class="user-location-pin"></div>
-          <div class="map-pin pin-1"><i class="fa-solid fa-store"></i> 150m</div>
-          <div class="map-pin pin-2"><i class="fa-solid fa-store"></i> 300m</div>
-          <div class="map-pin pin-3"><i class="fa-solid fa-store"></i> 500m</div>
+    <div class="app-header">
+      <i class="fa-solid fa-carrot header-logo"></i>
+      <div class="header-title">Grabbit</div>
+    </div>
+
+    <div class="main-scroll">
+      <div class="section-card">
+        <div class="section-heading">Recently Visited Stores</div>
+        
+        <div class="store-row">
+          <div class="store-icon-box"><i class="fa-solid fa-shop"></i></div>
+          <div class="store-name-text">Babu's Kirana Store</div>
         </div>
-        <div class="store-list-mini">
-          <div class="mini-list-title">
-            <i class="fa-solid fa-map-location-dot"></i> Nearby Kiranas
-          </div>
-          <div class="mini-store-item">
-            <span class="mini-store-name">Babu Store</span>
-            <span class="mini-store-dist">150 m</span>
-          </div>
-          <div class="mini-store-item">
-            <span class="mini-store-name">Lakshmi Kirana</span>
-            <span class="mini-store-dist">300 m</span>
-          </div>
-          <div class="mini-store-item">
-            <span class="mini-store-name">Sharma General</span>
-            <span class="mini-store-dist">500 m</span>
-          </div>
+
+        <div class="store-row">
+          <div class="store-icon-box"><i class="fa-solid fa-store"></i></div>
+          <div class="store-name-text">Lakshmi Provisions</div>
+        </div>
+
+        <div class="store-row">
+          <div class="store-icon-box"><i class="fa-solid fa-house-chimney-window"></i></div>
+          <div class="store-name-text">Sharmaji's General Store</div>
+        </div>
+
+        <div class="store-row">
+          <div class="store-icon-box"><i class="fa-solid fa-basket-shopping"></i></div>
+          <div class="store-name-text">Goyal Sweets & Grocers</div>
         </div>
       </div>
 
-      <div class="categories">
-        <div class="category-item">
-          <div class="category-icon"><i class="fa-solid fa-basket-shopping"></i></div>
-          <span class="category-label">Groceries</span>
-        </div>
-        <div class="category-item">
-          <div class="category-icon"><i class="fa-solid fa-apple-whole"></i></div>
-          <span class="category-label">Fruits</span>
-        </div>
-        <div class="category-item">
-          <div class="category-icon"><i class="fa-solid fa-cookie"></i></div>
-          <span class="category-label">Snacks</span>
-        </div>
-        <div class="category-item">
-          <div class="category-icon"><i class="fa-solid fa-pump-soap"></i></div>
-          <span class="category-label">Household</span>
-        </div>
-        <div class="category-item">
-          <div class="category-icon"><i class="fa-solid fa-bottle-droplet"></i></div>
-          <span class="category-label">Care</span>
-        </div>
-        <div class="category-item">
-          <div class="category-icon"><i class="fa-solid fa-grip"></i></div>
-          <span class="category-label">More</span>
+      <div class="section-card">
+        <div class="section-heading">Local Kirana Stores Nearby</div>
+        <div class="map-preview-widget" id="openMapBtn">
+          <div class="map-click-prompt">
+            <i class="fa-solid fa-hand-pointer"></i> Tap to Open Kirana Map
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="section-header">
-        <div class="section-title">Recently Visited Stores</div>
-        <a href="#" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
+    <div class="map-overlay" id="mapOverlay">
+      <div class="overlay-header">
+        <button class="back-btn" id="closeMapBtn"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="overlay-title">Your Local Kirana Shop Map</div>
       </div>
 
-      <div class="horizontal-cards">
-        <div class="store-card">
-          <div class="card-image">
+      <div class="map-canvas">
+        <div class="store-popup">
+          <div class="popup-img">
             <i class="fa-solid fa-shop"></i>
-            <i class="fa-regular fa-heart fav-btn"></i>
           </div>
-          <div class="card-body">
-            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 150 m</div>
-            <div class="card-title">Babu Store</div>
-            <div class="card-tags">Provisions • Rice • Oil</div>
-            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.8</div>
-            <div class="reserve-pill">Reserve Items</div>
-          </div>
-        </div>
-
-        <div class="store-card">
-          <div class="card-image">
-            <i class="fa-solid fa-store"></i>
-            <i class="fa-regular fa-heart fav-btn"></i>
-          </div>
-          <div class="card-body">
-            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 300 m</div>
-            <div class="card-title">Lakshmi Kirana</div>
-            <div class="card-tags">Spices • Dairy</div>
-            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.6</div>
-            <div class="reserve-pill">Reserve Items</div>
+          <div class="popup-info">
+            <h4>Babu's Kirana Store</h4>
+            <div class="popup-actions">
+              <button class="popup-btn">View Items</button>
+              <button class="popup-btn primary">Reserve Now</button>
+            </div>
           </div>
         </div>
 
-        <div class="store-card">
-          <div class="card-image">
-            <i class="fa-solid fa-house-chimney-window"></i>
-            <i class="fa-regular fa-heart fav-btn"></i>
-          </div>
-          <div class="card-body">
-            <div class="card-distance"><i class="fa-solid fa-location-dot"></i> 500 m</div>
-            <div class="card-title">Sharma General</div>
-            <div class="card-tags">Daily Essentials</div>
-            <div class="card-rating"><i class="fa-solid fa-star" style="color:#eac100;"></i> 4.5</div>
-            <div class="reserve-pill">Reserve Items</div>
-          </div>
+        <div class="map-pin-item" style="top: 150px; left: 160px;">
+          <div class="pin-icon"><i class="fa-solid fa-shop"></i></div>
+          <div class="pin-label">Babu's Store</div>
+        </div>
+
+        <div class="map-pin-item" style="top: 260px; right: 30px;">
+          <div class="pin-icon"><i class="fa-solid fa-store"></i></div>
+          <div class="pin-label">Lakshmi Provisions</div>
+        </div>
+
+        <div class="map-pin-item" style="bottom: 120px; left: 40px;">
+          <div class="pin-icon"><i class="fa-solid fa-house-chimney-window"></i></div>
+          <div class="pin-label">Sharmaji's General Store</div>
         </div>
       </div>
-    </div>
-
-    <div class="map-modal" id="mapModal">
-      <div class="map-modal-header">
-        <span class="map-modal-title"><i class="fa-solid fa-map"></i> Nearby Kirana Map</span>
-        <button class="close-map-btn" id="closeMapBtn"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="interactive-map-area">
-        <div class="map-store-pin" style="top: 30%; left: 20%;">
-          <i class="fa-solid fa-shop"></i> Babu Store (150m)
-        </div>
-        <div class="map-store-pin" style="top: 50%; left: 60%;">
-          <i class="fa-solid fa-shop"></i> Lakshmi Kirana (300m)
-        </div>
-        <div class="map-store-pin" style="top: 70%; left: 35%;">
-          <i class="fa-solid fa-shop"></i> Sharma General (500m)
-        </div>
-      </div>
-    </div>
-
-    <div class="bottom-nav">
-      <a href="#" class="nav-item active">
-        <i class="fa-solid fa-house"></i>
-        <span>Home</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-receipt"></i>
-        <span>Orders</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span>Cart</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-bars"></i>
-        <span>More</span>
-      </a>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Hide animated loader screen after 2.5 seconds
+      // Hide animated walking rabbit splash screen after 2.2 seconds
       setTimeout(() => {
-        const loader = document.getElementById('loaderScreen');
-        loader.classList.add('hidden');
-      }, 2500);
+        document.getElementById('splashScreen').classList.add('hidden');
+      }, 2200);
 
-      // Open Map Modal on widget click
-      const mapWidget = document.getElementById('mapWidget');
-      const mapModal = document.getElementById('mapModal');
+      // Open Map Overlay
+      const openMapBtn = document.getElementById('openMapBtn');
       const closeMapBtn = document.getElementById('closeMapBtn');
+      const mapOverlay = document.getElementById('mapOverlay');
 
-      mapWidget.addEventListener('click', () => {
-        mapModal.classList.add('active');
+      openMapBtn.addEventListener('click', () => {
+        mapOverlay.classList.add('open');
       });
 
       closeMapBtn.addEventListener('click', () => {
-        mapModal.classList.remove('active');
-      });
-
-      // Favorite Button Toggle
-      const favButtons = document.querySelectorAll('.fav-btn');
-      favButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          btn.classList.toggle('fa-regular');
-          btn.classList.toggle('fa-solid');
-          btn.style.color = btn.classList.contains('fa-solid') ? '#e63946' : 'white';
-        });
+        mapOverlay.classList.remove('open');
       });
     });
   </script>
