@@ -45,6 +45,9 @@
 .loadingbox .mascot{animation:rabbitWalk .55s ease-in-out infinite alternate;transform-origin:50% 85%}.loadingbox{overflow:hidden}.loadingbox:after{content:"";display:block;width:120px;height:9px;background:#cbd7ab;border-radius:50%;margin:-2px auto 0;opacity:.65;animation:shadowWalk .55s ease-in-out infinite alternate}@keyframes rabbitWalk{0%{transform:translateX(-8px) translateY(3px) rotate(-2deg)}100%{transform:translateX(8px) translateY(-8px) rotate(2deg)}}@keyframes shadowWalk{0%{transform:scaleX(.8);opacity:.35}100%{transform:scaleX(1.05);opacity:.75}}
 .map-preview{position:relative;margin:0 0 18px}.map-preview .mapbox{height:250px;cursor:pointer}.map-open{position:absolute;right:12px;bottom:12px;border:0;background:#fff;color:var(--plum);border-radius:999px;padding:9px 13px;font-weight:800;box-shadow:0 5px 16px #0002}.voice{border:0;background:#e4edc8;color:var(--green);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px;flex:none}.search .voice{margin-left:auto}.search .voice.listening{background:var(--plum);color:#fff;animation:voicePulse .9s infinite}@keyframes voicePulse{50%{box-shadow:0 0 0 8px #5a164233}}
 .fullmap{min-height:calc(100vh - 92px);padding:0 0 105px}.maphero{height:calc(100vh - 230px);min-height:520px;border-radius:0 0 30px 30px;position:relative;overflow:hidden;background:#d5e4bd;border-bottom:1px solid #c5d2aa;background-image:linear-gradient(28deg,transparent 45%,#b8cfa2 46%,#b8cfa2 49%,transparent 50%),linear-gradient(108deg,transparent 45%,#fff5d8 46%,#fff5d8 49%,transparent 50%),linear-gradient(7deg,transparent 48%,#b6caa1 49%,#b6caa1 51%,transparent 52%),linear-gradient(75deg,transparent 46%,#c8d9b4 47%,#c8d9b4 49%,transparent 50%)}.maphero .mapriver{height:750px;width:85px;right:20%;top:-90px}.maphero .you{left:48%;top:49%;width:24px;height:24px}.maphero .mapmarker{width:43px;height:43px;font-size:17px;box-shadow:0 5px 12px #0002}.maphero .m1{left:22%;top:30%}.maphero .m2{left:67%;top:24%}.maphero .m3{left:26%;top:70%}.maphero .m4{left:74%;top:67%}.maphero .d1{left:11%;top:38%}.maphero .d2{left:56%;top:32%}.maphero .d3{left:15%;top:78%}.maphero .d4{left:60%;top:75%}.maptop{position:absolute;left:14px;right:14px;top:14px;z-index:4;display:flex;gap:8px}.mapback{border:0;background:#ffffffe8;color:var(--plum);width:42px;height:42px;border-radius:50%;font-size:23px;box-shadow:0 5px 14px #0002}.mapsearch{flex:1;background:#ffffffe8;border-radius:999px;padding:10px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 5px 14px #0002}.mapsearch input{border:0;outline:0;background:transparent;width:100%}.mapcontrols{position:absolute;right:14px;bottom:14px;z-index:4;display:grid;gap:8px}.mapcontrol{width:45px;height:45px;border:0;border-radius:50%;background:#fff;color:var(--green);font-size:19px;box-shadow:0 5px 14px #0002}.map-sheet{background:var(--bg);padding:15px 18px 20px;border-radius:28px 28px 0 0;margin-top:-20px;position:relative;z-index:5}.map-sheet h2{margin:0;color:var(--plum);font-size:20px}.map-stores{display:flex;gap:9px;overflow:auto;padding-top:11px;scrollbar-width:none}.map-stores::-webkit-scrollbar{display:none}.map-store{min-width:190px;background:var(--card);border:1px solid var(--line);border-radius:17px;padding:12px}.map-store strong{color:var(--plum);display:block;font-size:13px}.map-store .dist{color:var(--green);font-weight:800;font-size:11px;margin-top:5px}
+.you-label{position:absolute;transform:translate(-50%,16px);background:#fff;color:var(--ink);font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:999px;box-shadow:0 3px 8px #0002;white-space:nowrap;z-index:4}
+.route-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}.route-path{fill:none;stroke:#3576e8;stroke-width:4;stroke-linecap:round}
+.mapmarker{z-index:4}.distancepill{z-index:4}.you{z-index:4}
 </style>
 </head>
 <body>
@@ -68,22 +71,23 @@ const stores=[
  {id:"green",name:"Green Basket",distance:"720 m",meters:720,rating:"4.6",reviews:43,cat:"Groceries • Fresh Produce",offer:"Local Picks",status:"Open",img:"https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80"}
 ];
 const products=[
- {id:"parleg",store:"christ",name:"Parle-G Biscuits (Family Pack)",price:40,cat:"Biscuits",emoji:"🍪",color:"#f6e9c9"},
- {id:"bourbon",store:"christ",name:"Britannia Bourbon Biscuits",price:35,cat:"Biscuits",emoji:"🍫",color:"#e9d7c3"},
- {id:"milk",store:"christ",name:"Amul Taaza Milk 500ml",price:28,cat:"Dairy",emoji:"🥛",color:"#eaf6ff"},
- {id:"maggi",store:"christ",name:"Maggi Noodles (Pack of 4)",price:56,cat:"Instant Food",emoji:"🍜",color:"#ffe8d6"},
+ {id:"parleg",store:"christ",name:"Parle-G Biscuits (Family Pack)",price:40,cat:"Biscuits",emoji:"🍪",color:"#f6e9c9",discount:15},
+ {id:"bourbon",store:"christ",name:"Britannia Bourbon Biscuits",price:35,cat:"Biscuits",emoji:"🍫",color:"#e9d7c3",discount:10},
+ {id:"milk",store:"christ",name:"Amul Taaza Milk 500ml",price:28,cat:"Dairy",emoji:"🥛",color:"#eaf6ff",discount:5},
+ {id:"maggi",store:"christ",name:"Maggi Noodles (Pack of 4)",price:56,cat:"Instant Food",emoji:"🍜",color:"#ffe8d6",discount:12},
  {id:"salt",store:"christ",name:"Tata Salt 1kg",price:25,cat:"Staples",emoji:"🧂",color:"#eef3d8"},
- {id:"marie",store:"christ",name:"Sunfeast Marie Biscuits",price:30,cat:"Biscuits",emoji:"🍪",color:"#f6e9c9"},
- {id:"gooday",store:"akp",name:"Good Day Biscuits",price:30,cat:"Biscuits",emoji:"🍪",color:"#f6e9c9"},
- {id:"lays",store:"akp",name:"Lay's Chips (Classic)",price:20,cat:"Snacks",emoji:"🍟",color:"#ffe9e0"},
+ {id:"marie",store:"christ",name:"Sunfeast Marie Biscuits",price:30,cat:"Biscuits",emoji:"🍪",color:"#f6e9c9",discount:25},
+ {id:"gooday",store:"akp",name:"Good Day Biscuits",price:30,cat:"Biscuits",emoji:"🍪",color:"#f6e9c9",discount:10},
+ {id:"lays",store:"akp",name:"Lay's Chips (Classic)",price:20,cat:"Snacks",emoji:"🍟",color:"#ffe9e0",discount:30},
  {id:"toothpaste",store:"akp",name:"Colgate Toothpaste 100g",price:55,cat:"Daily Needs",emoji:"🪥",color:"#e3f0ff",unavailable:true},
- {id:"oil",store:"akp",name:"Sunflower Oil 1L",price:150,cat:"Staples",emoji:"🛢️",color:"#fff3d6"},
- {id:"tea",store:"akp",name:"Tata Tea Gold 250g",price:120,cat:"Beverages",emoji:"🍵",color:"#e8f7ee"},
- {id:"choco",store:"campus",name:"Cadbury Dairy Milk",price:40,cat:"Chocolates",emoji:"🍫",color:"#f6e0ea"},
+ {id:"oil",store:"akp",name:"Sunflower Oil 1L",price:150,cat:"Staples",emoji:"🛢️",color:"#fff3d6",discount:15},
+ {id:"tea",store:"akp",name:"Tata Tea Gold 250g",price:120,cat:"Beverages",emoji:"🍵",color:"#e8f7ee",discount:20},
+ {id:"choco",store:"campus",name:"Cadbury Dairy Milk",price:40,cat:"Chocolates",emoji:"🍫",color:"#f6e0ea",discount:10},
  {id:"rusk",store:"campus",name:"Britannia Rusk",price:35,cat:"Biscuits",emoji:"🥖",color:"#f6e9c9"},
- {id:"frooti",store:"campus",name:"Frooti Mango Drink",price:20,cat:"Beverages",emoji:"🧃",color:"#fff0cf"},
- {id:"namkeen",store:"campus",name:"Haldiram Namkeen",price:45,cat:"Snacks",emoji:"🥨",color:"#ffe9e0"}
+ {id:"frooti",store:"campus",name:"Frooti Mango Drink",price:20,cat:"Beverages",emoji:"🧃",color:"#fff0cf",discount:8},
+ {id:"namkeen",store:"campus",name:"Haldiram Namkeen",price:45,cat:"Snacks",emoji:"🥨",color:"#ffe9e0",discount:12}
 ];
+function storeTopDeal(id){const items=products.filter(p=>p.store===id&&p.discount&&!p.unavailable);if(!items.length)return null;return items.reduce((a,b)=>b.discount>a.discount?b:a)}
 function productThumb(p,cls,size){return `<div class="${cls} emojipic" style="background:${p.color||'var(--sage)'}"><span style="font-size:${size}px">${p.emoji||'🛒'}</span></div>`}
 let cart=JSON.parse(localStorage.getItem("grabbit_cart")||"[]");
 let orders=JSON.parse(localStorage.getItem("grabbit_orders")||"[]");
@@ -119,24 +123,53 @@ function home(){
 return shell(`<div class="search"><span>⌕</span><input id="q" placeholder="Search products or recent stores..." oninput="searchHome(this.value)"><button class="voice" onclick="voiceSearch()" aria-label="Voice search">🎙</button></div>
 <section class="todaysoffers" id="todayOffers"><div class="sectionhead" style="margin-top:0"><h2>Today Offers</h2></div>
 <div class="promo-row">
-<div class="promo" style="background-image:url('${getStore('christ').img}')" onclick="nav('store:christ')"><span class="promo-badge">10% OFF</span><div class="promo-info"><strong>Christ Kirana</strong><span>On biscuits & snacks today</span></div></div>
-<div class="promo" style="background-image:url('${getStore('akp').img}')" onclick="nav('store:akp')"><span class="promo-badge">10% OFF</span><div class="promo-info"><strong>AKP BABU STORE</strong><span>On daily essentials today</span></div></div>
+${["christ","akp"].map(id=>{const s=getStore(id);const deal=storeTopDeal(id);return `<div class="promo" style="background-image:url('${s.img}')" onclick="nav('store:${id}')"><span class="promo-badge">⚡ FLASH SALE</span><div class="promo-info"><strong>${s.name}</strong><span>${deal?`${deal.name} • ${deal.discount}% off`:"Today's local picks"}</span></div></div>`}).join("")}
 </div></section>
-<section class="hero"><p>Discover local stores around Christ College, check products and reserve what you need.</p><button class="primary" onclick="nav('discover')">Discover Stores →</button></section>
-<div id="searchOut"></div>
 <div class="map-preview"><div onclick="nav('map')">${miniMap()}</div><button class="map-open" onclick="nav('map')">↗ View Full Map</button></div>
+<div id="searchOut"></div>
 <div class="sectionhead"><h2>Categories</h2><button class="link" onclick="nav('discover')">View all →</button></div>
 <div class="cats">${[["🍪","Biscuits"],["🥦","Groceries"],["🧴","Essentials"],["🥕","Vegetables"],["＋","More"]].map(x=>`<button class="cat" onclick="category('${x[1]}')"><div class="caticon">${x[0]}</div>${x[1]}</button>`).join("")}</div>
 <div class="sectionhead"><h2>Recently Purchased Stores</h2><button class="link" onclick="nav('discover')">Discover →</button></div>
-<div class="store-row">${["christ","akp"].map(id=>storeCard(getStore(id))).join("")}</div>`);
+<div class="store-row">${["christ","akp"].map(id=>storeCard(getStore(id))).join("")}</div>
+<div style="text-align:center;margin:26px 0 4px"><button class="secondary" onclick="nav('discover')">Discover More Stores →</button></div>`);
 }
 function searchHome(q){const out=document.getElementById("searchOut");if(!out)return;if(!q.trim()){out.innerHTML="";return}let z=q.toLowerCase();let ss=stores.filter(s=>(s.name+" "+s.cat).toLowerCase().includes(z));let ps=products.filter(p=>p.name.toLowerCase().includes(z));out.innerHTML=`<div class="sectionhead"><h2>Search</h2></div>${ss.map(storeCard).join("")}${ps.length?`<div class="productgrid" style="margin-top:10px">${ps.map(productCard).join("")}</div>`:""}${!ss.length&&!ps.length?`<p class="meta">No results found.</p>`:""}`}
 function category(c){const map={"Biscuits":"christ","Groceries":"green","Vegetables":"green"};nav(map[c]?"store:"+map[c]:"discover")}
 
-function miniMap(){return `<div class="mapbox"><div class="mapriver"></div><div class="you"></div>${[["m1","d1","50 m","christ"],["m2","d2","150 m","campus"],["m3","d3","500 m","akp"],["m4","d4","720 m","green"]].map(x=>`<button class="mapmarker ${x[0]}" onclick="event.stopPropagation();nav('store:${x[3]}')"><span>⌖</span></button><span class="distancepill ${x[1]}">${getStore(x[3]).name} • ${x[2]}</span>`).join("")}<div style="position:absolute;left:45%;top:42%;font-size:22px">🧍</div></div>`}
-function mapPage(){return shell(`<div class="fullmap"><div class="maphero"><div class="maptop"><button class="mapback" onclick="goBack()">‹</button><div class="mapsearch"><span>⌕</span><input placeholder="Search stores on map..." oninput="mapSearch(this.value)"><button class="voice" onclick="voiceSearch()">🎙</button></div></div><div class="mapriver"></div><div class="you"></div>${[["m1","d1","50 m","christ"],["m2","d2","150 m","campus"],["m3","d3","500 m","akp"],["m4","d4","720 m","green"]].map(x=>`<button class="mapmarker ${x[0]}" onclick="nav('store:${x[3]}')"><span>⌖</span></button><span class="distancepill ${x[1]}">${getStore(x[3]).name} • ${x[2]}</span>`).join("")}<div style="position:absolute;left:47%;top:46%;font-size:25px">🧍</div><div class="mapcontrols"><button class="mapcontrol" onclick="notify('Your location centered')">◎</button><button class="mapcontrol" onclick="notify('Map zoomed in')">＋</button><button class="mapcontrol" onclick="notify('Map zoomed out')">−</button></div></div><div class="map-sheet"><h2>Stores near Christ College</h2><div class="meta">Distances are demo distances from the campus location.</div><div class="map-stores" id="mapStores">${stores.map(s=>`<button class="map-store" onclick="nav('store:${s.id}')"><strong>${s.name}</strong><div class="dist">⌖ ${s.distance} away</div><div class="meta">${s.cat}</div></button>`).join("")}</div></div></div>`,'home',false)}
-function mapSearch(q){const z=q.toLowerCase().trim();const a=stores.filter(s=>(s.name+s.cat).toLowerCase().includes(z));const el=document.getElementById('mapStores');if(el)el.innerHTML=a.map(s=>`<button class="map-store" onclick="nav('store:${s.id}')"><strong>${s.name}</strong><div class="dist">⌖ ${s.distance} away</div><div class="meta">${s.cat}</div></button>`).join("")||`<div class="meta">No nearby store found.</div>`}
+function miniMap(){return `<div class="mapbox"><div class="mapriver"></div><div class="you"></div><div class="you-label" style="left:47%;top:46%">Christ College</div>${[["m1","d1","50 m","christ"],["m2","d2","150 m","campus"],["m3","d3","500 m","akp"],["m4","d4","720 m","green"]].map(x=>`<button id="marker-${x[3]}" class="mapmarker ${x[0]}" onclick="event.stopPropagation();routeThenGo('${x[3]}')"><span>⌖</span></button><span class="distancepill ${x[1]}">${getStore(x[3]).name} • ${x[2]}</span>`).join("")}<div style="position:absolute;left:45%;top:42%;font-size:22px">🧍</div></div>`}
+function mapPage(){return shell(`<div class="fullmap"><div class="maphero"><div class="maptop"><button class="mapback" onclick="goBack()">‹</button><div class="mapsearch"><span>⌕</span><input placeholder="Search stores on map..." oninput="mapSearch(this.value)"><button class="voice" onclick="voiceSearch()">🎙</button></div></div><div class="mapriver"></div><div class="you"></div><div class="you-label" style="left:48%;top:49%">Christ College</div>${[["m1","d1","50 m","christ"],["m2","d2","150 m","campus"],["m3","d3","500 m","akp"],["m4","d4","720 m","green"]].map(x=>`<button id="marker-${x[3]}" class="mapmarker ${x[0]}" onclick="routeThenGo('${x[3]}')"><span>⌖</span></button><span class="distancepill ${x[1]}">${getStore(x[3]).name} • ${x[2]}</span>`).join("")}<div style="position:absolute;left:47%;top:46%;font-size:25px">🧍</div><div class="mapcontrols"><button class="mapcontrol" onclick="notify('Your location centered')">◎</button><button class="mapcontrol" onclick="notify('Map zoomed in')">＋</button><button class="mapcontrol" onclick="notify('Map zoomed out')">−</button></div></div><div class="map-sheet"><h2>Stores near Christ College</h2><div class="meta">Distances are demo distances from the campus location.</div><div class="map-stores" id="mapStores">${stores.map(s=>`<button class="map-store" onclick="routeThenGo('${s.id}')"><strong>${s.name}</strong><div class="dist">⌖ ${s.distance} away</div><div class="meta">${s.cat}</div></button>`).join("")}</div></div></div>`,'home',false)}
+function mapSearch(q){const z=q.toLowerCase().trim();const a=stores.filter(s=>(s.name+s.cat).toLowerCase().includes(z));const el=document.getElementById('mapStores');if(el)el.innerHTML=a.map(s=>`<button class="map-store" onclick="routeThenGo('${s.id}')"><strong>${s.name}</strong><div class="dist">⌖ ${s.distance} away</div><div class="meta">${s.cat}</div></button>`).join("")||`<div class="meta">No nearby store found.</div>`}
 function voiceSearch(){const input=document.querySelector('#q, .mapsearch input');const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){notify('Voice search is not supported in this browser');return}const btn=document.querySelector('.voice');const rec=new SpeechRecognition();rec.lang='en-IN';rec.interimResults=false;rec.maxAlternatives=1;if(btn)btn.classList.add('listening');rec.onresult=e=>{const text=e.results[0][0].transcript;if(input){input.value=text;if(input.id==='q')searchHome(text);else mapSearch(text)}notify('Searching for “'+text+'”')};rec.onerror=()=>notify('Could not hear that — try again');rec.onend=()=>btn&&btn.classList.remove('listening');rec.start()}
+function routeThenGo(storeId){
+try{
+const container=document.querySelector('.mapbox, .maphero');
+const youEl=container?container.querySelector('.you'):null;
+const markerEl=container?container.querySelector('#marker-'+storeId):null;
+if(container&&youEl&&markerEl){
+drawRoute(container,youEl,markerEl);
+notify('Finding route to '+getStore(storeId).name+'…');
+setTimeout(()=>nav('store:'+storeId),900);
+return;
+}
+}catch(e){}
+nav('store:'+storeId);
+}
+function drawRoute(container,fromEl,toEl){
+const rect=container.getBoundingClientRect(),f=fromEl.getBoundingClientRect(),t=toEl.getBoundingClientRect();
+const x1=f.left+f.width/2-rect.left,y1=f.top+f.height/2-rect.top,x2=t.left+t.width/2-rect.left,y2=t.top+t.height/2-rect.top;
+const bend1x=x1+(x2-x1)*0.33+(Math.random()*70-35),bend1y=y1+(y2-y1)*0.33+(Math.random()*70-35);
+const bend2x=x1+(x2-x1)*0.66+(Math.random()*70-35),bend2y=y1+(y2-y1)*0.66+(Math.random()*70-35);
+let svg=container.querySelector('.route-svg');
+if(!svg){svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','route-svg');container.appendChild(svg)}
+svg.innerHTML='';
+const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+path.setAttribute('d',`M ${x1} ${y1} C ${bend1x} ${bend1y}, ${bend2x} ${bend2y}, ${x2} ${y2}`);
+path.setAttribute('class','route-path');
+svg.appendChild(path);
+const len=path.getTotalLength();
+path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
+requestAnimationFrame(()=>{path.style.transition='stroke-dashoffset .8s ease';path.style.strokeDashoffset='0'});
+}
 
 function discover(){
 return shell(`<div class="pagehead"><h1>Discover Stores</h1><p>Stores around Christ College • live demo distances</p></div>
